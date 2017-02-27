@@ -13,7 +13,8 @@ def read(fname):
 
 requires = [
     'pyramid',
-    'pyramid_debugtoolbar'
+    'pyramid_debugtoolbar',
+    'pytest'
 ]
 
 setup(name='dyeus',
