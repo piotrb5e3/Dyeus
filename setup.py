@@ -1,6 +1,5 @@
 import os
 from setuptools import setup
-from .version import VERSION
 
 
 # Utility function to read the README file.
@@ -18,7 +17,7 @@ requires = [
 ]
 
 setup(name='dyeus',
-      version=VERSION,
+      version='0.0.2',
       author='Piotr Bakalarski',
       author_email='piotrb5e3@gmail.com',
       license='GPLv3',

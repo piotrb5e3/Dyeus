@@ -1,11 +1,10 @@
 from pyramid.response import Response
-from version import VERSION
 
 
-def setup_monitoring(config):
+def setup_monitoring(config, settings):
     config.add_route('version', '/version')
-    config.add_view(version, route_name='version')
+    config.add_view(version_factory(settings['version']), route_name='version')
 
 
-def version(request):
-    return Response('Dyeus v{}'.format(VERSION))
+def version_factory(version):
+    return lambda request: Response('Dyeus v{}'.format(version))
