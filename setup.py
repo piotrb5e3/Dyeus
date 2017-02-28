@@ -13,7 +13,10 @@ def read(fname):
 requires = [
     'pyramid',
     'pyramid_debugtoolbar',
-    'pytest'
+    'pytest',
+    'sqlalchemy',
+    'pyramid_tm',
+    'zope.sqlalchemy'
 ]
 
 setup(name='dyeus',
@@ -26,8 +29,5 @@ setup(name='dyeus',
           'data, and making recommendations based on preset rules.'),
       long_description=read('README.md'),
       install_requires=requires,
-      entry_points="""\
-      [paste.app_factory]
-      main = dyeus:main
-      """,
+      entry_points=read('entry_points.ini')
       )
