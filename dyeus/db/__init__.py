@@ -12,4 +12,4 @@ Base = declarative_base()
 
 
 def load_models():
-    pass
+    from dyeus.models import Appliance, Sensor, SensorReading, SensorValue
