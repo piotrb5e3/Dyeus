@@ -16,7 +16,9 @@ requires = [
     'pytest',
     'sqlalchemy',
     'pyramid_tm',
-    'zope.sqlalchemy'
+    'zope.sqlalchemy',
+    'cornice',
+    'Faker'
 ]
 
 setup(name='dyeus',

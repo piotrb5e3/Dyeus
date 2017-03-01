@@ -4,6 +4,7 @@ from sqlalchemy import engine_from_config
 from .db import Base, DBSession, load_models
 
 from .monitoring import setup_monitoring
+from .appliances import setup_api
 
 
 def main(global_config, **settings):
@@ -13,5 +14,7 @@ def main(global_config, **settings):
     Base.metadata.bind = engine
 
     config = Configurator(settings=settings)
-    setup_monitoring(config, settings=settings)
+    config.include("cornice")
+    setup_monitoring(config, settings)
+    setup_api(config, settings)
     return config.make_wsgi_app()
