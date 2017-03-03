@@ -10,10 +10,4 @@ Dyeus is a web application for gathering and displaying sensory data, and making
 * Clone this repository
 * Optionally create a virtualenv
 * `cd Dyeus`
-* `pip install -e .`
-
-### Development run
-`pserve development.ini --reload`
-
-### Running tests
-`pytest`
+* `pip install -r requirements.txt`
