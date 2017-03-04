@@ -1,0 +1,7 @@
+{{#if errorMessage}}
+    {{errorMessage}}<br>
+{{/if}}
+{{input type="text" value=login}}<br>
+{{input type="password" value=password}}<br>
+<button {{action "authenticate"}}>Login!</button><br>
+{{outlet}}
