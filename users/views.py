@@ -13,5 +13,5 @@ def auth_test(request):
 @api_view(['GET'])
 @permission_classes((IsAuthenticated,))
 def get_current_user_data(request):
-    user = get_user(request)
+    user = request.user
     return Response({'username': user.get_username()})

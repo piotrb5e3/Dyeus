@@ -32,7 +32,7 @@ export default Base.extend({
         headers: {
           'Authorization': `Token ${authResponse.token}`,
         },
-      }).then((userDataResponse)=> {
+      }).then((userDataResponse) => {
         return {
           token: authResponse.token,
           username: userDataResponse.username,
@@ -41,6 +41,6 @@ export default Base.extend({
     });
   },
 
-  invalidate(data) {
+  invalidate(/* data */) {
   }
 });

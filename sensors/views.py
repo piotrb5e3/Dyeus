@@ -1,7 +1,6 @@
 from rest_framework import viewsets, permissions, status
 from rest_framework.response import Response
 from rest_framework.decorators import detail_route
-from django.contrib.auth import get_user
 from django.shortcuts import get_object_or_404
 
 from .models import Sensor
@@ -13,14 +12,14 @@ class SensorViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsAuthenticated,)
 
     def get_queryset(self):
-        user = get_user(self.request)
+        user = self.request.user
         if self.request.user.is_authenticated:
             return Sensor.objects.filter(appliance__owner=user)
         return []
 
     @detail_route(methods=['get'])
     def recent(self, request, pk=None):
-        user = get_user(request)
+        user = request.user
         sensor = get_object_or_404(Sensor, pk=pk)
         if not sensor.appliance.owner == user:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
