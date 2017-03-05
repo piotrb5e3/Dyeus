@@ -2,6 +2,7 @@ from rest_framework import viewsets, permissions, status
 from rest_framework.response import Response
 from .models import Appliance
 from .serializers import ApplianceSerializer
+from .authentication import create_authentication_value
 
 
 class ApplianceViewSet(viewsets.ModelViewSet):
@@ -18,8 +19,12 @@ class ApplianceViewSet(viewsets.ModelViewSet):
         if not serializer.is_valid():
             return Response(serializer.error_messages,
                             status=status.HTTP_400_BAD_REQUEST)
+        auth_model = serializer.validated_data['authentication_model']
+
         appliance = Appliance(
             name=serializer.validated_data['name'],
+            authentication_model=auth_model,
+            authentication_value=create_authentication_value(auth_model),
             owner=request.user)
         appliance.save()
         return Response(ApplianceSerializer(appliance).data,

@@ -56,6 +56,7 @@
     "ember-simple-auth": "1.2.0",
     "ember-truth-helpers": "1.2.0",
     "ember-welcome-page": "^1.0.1",
+    "emberx-select": "3.0.0",
     "highcharts": "5.0.7",
     "liquid-fire": "0.27.1",
     "loader.js": "^4.0.1"

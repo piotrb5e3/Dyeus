@@ -9,4 +9,6 @@ class ApplianceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Appliance
-        fields = ('id', 'name', 'sensors')
+        fields = ('id', 'name', 'sensors', 'is_active', 'authentication_model',
+                  'authentication_value')
+        read_only_fields = ('sensors', 'is_active', 'authentication_value')

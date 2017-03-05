@@ -1,0 +1,17 @@
+{{#mdl-card}}
+    <form {{action "submitNewAppliance"}}>
+        <div class="mdl-card__supporting-text">
+
+            {{mdl-textfield label='Name' value=model.name}}
+            {{#x-select value=model.authenticationModel
+                        on-change=(action 'setAuthModel') as |xs|}}
+                {{#xs.option value=""}}----{{/xs.option}}
+                {{#xs.option value="token"}}Token over HTTPS{{/xs.option}}
+            {{/x-select}}
+        </div>
+        {{#mdl-card-actions}}
+            {{mdl-button isRaised=true text='Log in'}}
+        {{/mdl-card-actions}}
+    </form>
+{{/mdl-card}}
+{{outlet}}

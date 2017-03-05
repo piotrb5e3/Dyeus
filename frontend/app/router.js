@@ -14,6 +14,7 @@ Router.map(function () {
         this.route('recent');
       });
     });
+    this.route('new');
   });
   this.route('logout');
 });
