@@ -1,1 +1,20 @@
-{{outlet}}
+{{title "Dyeus"}}
+{{#if session.isAuthenticated}}
+    {{#mdl-nav
+            fixedDrawer=true
+            mobileTitle='Dyeus'}}
+        {{mdl-nav-item name='Appliances' route='appliances'}}
+        {{mdl-nav-item name='Logout' route='logout'}}
+        <div class="mdl-grid">
+            <div class="mdl-cell mdl-cell--12-col">
+                {{outlet}}
+            </div>
+        </div>
+    {{/mdl-nav}}
+{{else}}
+    <div class="mdl-grid">
+        <div class="mdl-cell mdl-cell--12-col">
+            {{outlet}}
+        </div>
+    </div>
+{{/if}}

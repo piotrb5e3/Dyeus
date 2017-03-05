@@ -1,6 +1,6 @@
 /* jshint node: true */
 
-module.exports = function(environment) {
+module.exports = function (environment) {
   var ENV = {
     modulePrefix: 'frontend',
     environment: environment,
@@ -12,7 +12,9 @@ module.exports = function(environment) {
         // e.g. 'with-controller': true
       }
     },
-
+    sassOptions: {
+      includePaths: ['bower_components/material-design-lite/src']
+    },
     APP: {
       // Here you can pass flags/options to your application instance
       // when it is created
@@ -26,6 +28,7 @@ module.exports = function(environment) {
 
   if (environment === 'test') {
     // Testem prefers this...
+    ENV.rootURL = '/';
     ENV.locationType = 'none';
 
     // keep test console output quieter

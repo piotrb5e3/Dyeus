@@ -7,9 +7,12 @@ export default Ember.Controller.extend({
   actions: {
     authenticate() {
       let {login, password} = this.getProperties('login', 'password');
+      console.log({login, password});
       this.get('session').authenticate('authenticator:backend-authenticator', login, password)
-        .then(()=> {
-          this.transitionToRoute('index')
+        .then(() => this.transitionToRoute('index'))
+        .then(() => {
+          this.set('login', '');
+          this.set('password', '');
         })
         .catch((err) => {
           console.log(err);

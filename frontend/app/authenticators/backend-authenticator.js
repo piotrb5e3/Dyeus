@@ -39,8 +39,5 @@ export default Base.extend({
         };
       });
     });
-  },
-
-  invalidate(/* data */) {
   }
 });

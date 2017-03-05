@@ -1,7 +1,20 @@
-{{#if errorMessage}}
-    {{errorMessage}}<br>
-{{/if}}
-{{input type="text" value=login}}<br>
-{{input type="password" value=password}}<br>
-<button {{action "authenticate"}}>Login!</button><br>
+{{title "Login"}}
+{{#mdl-card title='Login'}}
+    <form {{action "authenticate" on="submit"}}>
+        <div class="mdl-card__supporting-text">
+            {{#if errorMessage}}
+                {{errorMessage}}<br>
+            {{/if}}
+
+            {{mdl-textfield label='Username'
+                            value=login}}
+            {{mdl-textfield label='Password'
+                            value=password
+                            type='password'}}
+        </div>
+        {{#mdl-card-actions}}
+            {{mdl-button isRaised=true text='Log in'}}
+        {{/mdl-card-actions}}
+    </form>
+{{/mdl-card}}
 {{outlet}}
