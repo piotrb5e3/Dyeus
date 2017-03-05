@@ -1,1 +1,19 @@
+{{#paper-list}}
+    {{#each model.sensors as |sensor|}}
+        {{#paper-item
+                onClick=(action "goToSensor" sensor)}}
+            <p>
+                {{paper-icon "expand-more"}}
+                {{sensor.name}}
+            </p>
+        {{/paper-item}}
+    {{else}}
+        {{#paper-item}}
+            <p>This appliance has no sensors.
+                {{#link-to "appliances.new"}}
+                    Create a sensor.
+                {{/link-to}}</p>
+        {{/paper-item}}
+    {{/each}}
+{{/paper-list}}
 {{outlet}}

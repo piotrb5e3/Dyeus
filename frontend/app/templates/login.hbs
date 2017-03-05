@@ -1,20 +1,43 @@
-{{title "Login"}}
-{{#mdl-card title='Login'}}
-    <form {{action "authenticate" on="submit"}}>
-        <div class="mdl-card__supporting-text">
-            {{#if errorMessage}}
-                {{errorMessage}}<br>
-            {{/if}}
-
-            {{mdl-textfield label='Username'
-                            value=login}}
-            {{mdl-textfield label='Password'
-                            value=password
-                            type='password'}}
-        </div>
-        {{#mdl-card-actions}}
-            {{mdl-button isRaised=true text='Log in'}}
-        {{/mdl-card-actions}}
-    </form>
-{{/mdl-card}}
+{{title "Sign in"}}
+<div class="layout-row layout-align-center">
+    <div class="layout-column flex-40">
+        {{#paper-card as |card|}}
+            {{#paper-form onSubmit=(action "authenticate") as |form|}}
+                {{#card.content }}
+                    {{#if errorMessage}}
+                        <div class="layout-row">
+                            <div class="layout-column flex-100">
+                                {{errorMessage}}
+                            </div>
+                        </div>
+                    {{/if}}
+                    <div class="layout-row">
+                        <div class="layout-column flex-100">
+                            {{form.input label='Username'
+                                         value=login
+                                         onChange=(action (mut login))
+                                         required=true}}
+                        </div>
+                    </div>
+                    <div class="layout-row">
+                        <div class="layout-column flex-100">
+                            {{form.input label='Password'
+                                         value=password
+                                         type='password'
+                                         onChange=(action (mut password))
+                                         required=true}}
+                        </div>
+                    </div>
+                    {{#card.actions}}
+                        {{#form.submit-button
+                                primary=true
+                                disabled=form.isInvalid}}
+                            Sign in
+                        {{/form.submit-button}}
+                    {{/card.actions}}
+                {{/card.content}}
+            {{/paper-form}}
+        {{/paper-card}}
+    </div>
+</div>
 {{outlet}}

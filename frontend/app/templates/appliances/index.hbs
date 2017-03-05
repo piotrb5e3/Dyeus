@@ -1,26 +1,19 @@
-{{#if model}}
-    {{#cp-panels accordion=true as |panels|}}
-        {{#each model as |appliance|}}
-            {{#panels.panel as |panel|}}
-                {{#panel.toggle}}
-                    {{appliance.name}}
-                {{/panel.toggle}}
-                {{#panel.body tagName="ul"}}
-                    {{#each appliance.sensors as |sensor|}}
-                        <li>
-                            {{#link-to "appliances.detail.sensor.recent"
-                                       appliance
-                                       sensor}}
-                                {{sensor.name}}
-                            {{/link-to}}
-                        </li>
-                    {{else}}
-                        <li>This appliance has no sensors defined!</li>
-                    {{/each}}
-                {{/panel.body}}
-            {{/panels.panel}}
-        {{/each}}
-    {{/cp-panels}}
-{{/if}}
-
+{{#paper-list}}
+    {{#each model as |appliance|}}
+        {{#paper-item
+                onClick=(action "goToAppliance" appliance)}}
+            <p>
+                {{paper-icon "expand-more"}}
+                {{appliance.name}}
+            </p>
+        {{/paper-item}}
+    {{else}}
+        {{#paper-item as |controls|}}
+            <p>You have no appliances.
+                {{#link-to "appliances.new"}}
+                    Create your first appliance.
+                {{/link-to}}</p>
+        {{/paper-item}}
+    {{/each}}
+{{/paper-list}}
 {{outlet}}

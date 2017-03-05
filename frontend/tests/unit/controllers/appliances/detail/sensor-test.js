@@ -1,6 +1,6 @@
 import { moduleFor, test } from 'ember-qunit';
 
-moduleFor('controller:appliances/detail/sensor/recent', 'Unit | Controller | appliances/detail/sensor/recent', {
+moduleFor('controller:appliances/detail/sensor', 'Unit | Controller | appliances/detail/sensor', {
   // Specify the other units that are required for this test.
   // needs: ['controller:foo']
 });

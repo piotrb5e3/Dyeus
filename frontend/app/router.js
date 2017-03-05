@@ -10,9 +10,7 @@ Router.map(function () {
   this.route('login');
   this.route('appliances', function () {
     this.route('detail', {path: ":appliance_id"}, function () {
-      this.route('sensor', {path: "sensor/:sensor_id"}, function() {
-        this.route('recent');
-      });
+      this.route('sensor', {path: "sensor/:sensor_id"}, function() {});
     });
     this.route('new');
   });

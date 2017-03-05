@@ -1,21 +1,32 @@
-{{title "Dyeus"}}
-{{#if session.isAuthenticated}}
-    {{#mdl-nav
-            fixedDrawer=true
-            mobileTitle='Dyeus'}}
-        {{mdl-nav-item name='Appliances' route='appliances'}}
-        {{mdl-nav-item name='New appliance' route='appliances.new'}}
-        {{mdl-nav-item name='Logout' route='logout'}}
-        <div class="mdl-grid">
-            <div class="mdl-cell mdl-cell--12-col">
-                {{outlet}}
-            </div>
-        </div>
-    {{/mdl-nav}}
-{{else}}
-    <div class="mdl-grid">
-        <div class="mdl-cell mdl-cell--12-col">
+{{#paper-toolbar as |toolbar|}}
+    {{#paper-toolbar-tools}}Dyeus{{/paper-toolbar-tools}}
+{{/paper-toolbar}}
+{{#paper-sidenav-container class="inner-sidenav"}}
+    {{#paper-sidenav
+            class="md-whiteframe-z2"
+            name="left2"
+            lockedOpen=true}}
+        {{#paper-content}}
+            {{#paper-list}}
+                {{#paper-item onClick=(action "goToRoute" "appliances")}}
+                    Appliances
+                {{/paper-item}}
+                {{#paper-item onClick=(action "goToRoute" "appliances.new")}}
+                    New appliance
+                {{/paper-item}}
+                {{#if session.isAuthenticated}}
+                    {{#paper-item onClick=(action "logout")}}
+                        Logout
+                    {{/paper-item}}
+                {{/if}}
+            {{/paper-list}}
+        {{/paper-content}}
+    {{/paper-sidenav}}
+
+    {{#paper-card-content class="flex"}}
+        <div class="layout-fill layout-column">
             {{outlet}}
         </div>
-    </div>
-{{/if}}
+    {{/paper-card-content}}
+
+{{/paper-sidenav-container}}
