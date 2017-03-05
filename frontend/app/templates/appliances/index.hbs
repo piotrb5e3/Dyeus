@@ -7,7 +7,13 @@
                 {{/panel.toggle}}
                 {{#panel.body tagName="ul"}}
                     {{#each appliance.sensors as |sensor|}}
-                        <li>{{sensor.name}}</li>
+                        <li>
+                            {{#link-to "appliances.detail.sensor.recent"
+                                       appliance
+                                       sensor}}
+                                {{sensor.name}}
+                            {{/link-to}}
+                        </li>
                     {{else}}
                         <li>This appliance has no sensors defined!</li>
                     {{/each}}

@@ -1906,6 +1906,12 @@ ember-factory-for-polyfill@^1.1.0:
     ember-cli-babel "^5.1.7"
     ember-cli-version-checker "^1.2.0"
 
+ember-getowner-polyfill@1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/ember-getowner-polyfill/-/ember-getowner-polyfill-1.0.1.tgz#f60a31d25d642461dac4b4746184afaf7f5084ae"
+  dependencies:
+    ember-cli-babel "^5.1.5"
+
 ember-getowner-polyfill@^1.1.0, ember-getowner-polyfill@^1.1.1:
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/ember-getowner-polyfill/-/ember-getowner-polyfill-1.2.2.tgz#cdab739e89cc8f25af0f78735422df1a61193e92"
@@ -1927,6 +1933,16 @@ ember-hash-helper-polyfill@^0.1.2:
   dependencies:
     ember-cli-babel "^5.1.7"
     ember-cli-version-checker "^1.2.0"
+
+ember-highcharts@0.5.2:
+  version "0.5.2"
+  resolved "https://registry.yarnpkg.com/ember-highcharts/-/ember-highcharts-0.5.2.tgz#430dcb5b9b92a38844b286e349cf8ce2d50ef419"
+  dependencies:
+    broccoli-funnel "^1.0.1"
+    broccoli-merge-trees "^1.1.1"
+    ember-cli-babel "^5.1.6"
+    ember-cli-htmlbars "^1.0.3"
+    ember-getowner-polyfill "1.0.1"
 
 ember-inflector@^1.9.4:
   version "1.11.0"
@@ -2821,6 +2837,10 @@ heimdalljs@^0.3.0:
   resolved "https://registry.yarnpkg.com/heimdalljs/-/heimdalljs-0.3.2.tgz#d19f98cf7c6a7660c2ecbbeaa696db3436227713"
   dependencies:
     rsvp "~3.2.1"
+
+highcharts@5.0.7:
+  version v5.0.7
+  resolved "https://registry.yarnpkg.com/highcharts/-/highcharts-5.0.7.tgz#63ebeeee05acd56e3b2554b5b31a1224e1e05bf6"
 
 hoek@2.x.x:
   version "2.16.3"
