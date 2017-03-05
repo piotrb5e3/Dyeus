@@ -1,5 +1,20 @@
-{{#each model as |appliance|}}
-    {{appliance.name}}<br>
-{{/each}}
+{{#if model}}
+    {{#cp-panels accordion=true as |panels|}}
+        {{#each model as |appliance|}}
+            {{#panels.panel as |panel|}}
+                {{#panel.toggle}}
+                    {{appliance.name}}
+                {{/panel.toggle}}
+                {{#panel.body tagName="ul"}}
+                    {{#each appliance.sensors as |sensor|}}
+                        <li>{{sensor.name}}</li>
+                    {{else}}
+                        <li>This appliance has no sensors defined!</li>
+                    {{/each}}
+                {{/panel.body}}
+            {{/panels.panel}}
+        {{/each}}
+    {{/cp-panels}}
+{{/if}}
 
 {{outlet}}
