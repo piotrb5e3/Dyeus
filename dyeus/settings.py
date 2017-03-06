@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     'appliances',
     'sensors',
     'users',
+    'collect',
 ]
 
 MIDDLEWARE = [

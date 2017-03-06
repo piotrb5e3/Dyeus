@@ -5,12 +5,14 @@ from django.conf import settings
 from appliances.urls import urlpatterns as appliances_urls
 from sensors.urls import urlpatterns as sensors_urls
 from users.urls import urlpatterns as users_urls
+from collect.urls import urlpatterns as collect_urls
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^', include(appliances_urls)),
     url(r'^', include(sensors_urls)),
-    url(r'^', include(users_urls))
+    url(r'^', include(users_urls)),
+    url(r'^', include(collect_urls))
 ]
 
 if settings.DEBUG:
