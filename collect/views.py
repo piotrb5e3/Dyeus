@@ -23,6 +23,8 @@ def token_collect(request):
         raise Exception("Assertion error: token matches multiple appliances")
 
     appliance = appliance.first()
+    if not appliance.is_active:
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
 
     sensors = request.data['sensors']
 
