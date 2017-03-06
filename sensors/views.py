@@ -25,6 +25,6 @@ class SensorViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_401_UNAUTHORIZED)
 
         q = sensor.sensor_values.all().order_by('-reading__timestamp')
-        q = q.values_list('value', flat=True)
+        q = q.values_list('reading__timestamp', 'value')
         values = q[:100]
-        return Response({'values': values})
+        return Response({'values': [[v[0], v[1]] for v in values.reverse()], })

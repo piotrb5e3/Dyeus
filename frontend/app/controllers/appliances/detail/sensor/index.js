@@ -18,8 +18,10 @@ export default Ember.Controller.extend({
     },
   },
   chartData: Ember.computed('model', function () {
-    const values = this.get('model').values.map(parseFloat);
+    const values = this.get('model').values.map(([x, y]) => [Date.parse(x), parseFloat(y)]);
+    console.log(values);
     return [{
+      type: 'line',
       name: 'Plot',
       data: values,
     }];
