@@ -3,7 +3,10 @@
     {{#toolbar.tools}}
       <h2>{{model.name}}</h2>
       <span class="flex"></span>
-      {{#paper-button mini=true aria-label="Delete" disabled=model.isActive}}
+      {{#paper-button mini=true
+                      aria-label="Delete"
+                      disabled=model.isActive
+                      onClick=(action 'deleteAppliance')}}
         {{paper-icon "delete"}}
       {{/paper-button}}
     {{/toolbar.tools}}
@@ -36,7 +39,7 @@
       </div>
     </div>
     <div class="layout-row">
-      {{sensors-list appliance=model goToSensor=(action "goToSensor")}}
+      {{sensors-list appliance=model goToSensor=(action "goToSensor") addSensor=(action 'goToAddSensor')}}
     </div>
   {{/card.content}}
 {{/paper-card}}

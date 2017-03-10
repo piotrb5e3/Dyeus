@@ -3,7 +3,10 @@
     {{#toolbar.tools}}
       <h3>Sensors</h3>
       <span class="flex"></span>
-      {{#paper-button mini=true aria-label="Add" disabled=appliance.isActive}}
+      {{#paper-button mini=true
+                      aria-label="Add"
+                      disabled=appliance.isActive
+                      onClick=(action addSensor)}}
         {{paper-icon "add"}}
       {{/paper-button}}
     {{/toolbar.tools}}

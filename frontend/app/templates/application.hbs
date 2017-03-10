@@ -11,9 +11,6 @@
         {{#paper-item onClick=(action "goToRoute" "appliances")}}
           Appliances
         {{/paper-item}}
-        {{#paper-item onClick=(action "goToRoute" "appliances.new")}}
-          New appliance
-        {{/paper-item}}
         {{#if session.isAuthenticated}}
           {{#paper-item onClick=(action "logout")}}
             Logout

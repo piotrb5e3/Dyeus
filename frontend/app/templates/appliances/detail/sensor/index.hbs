@@ -2,9 +2,17 @@
 {{#paper-card as |card|}}
   {{#paper-toolbar as |toolbar|}}
     {{#toolbar.tools}}
-      <h2>{{model.name}}</h2>
+      <h2>
+        {{#link-to 'appliances.detail' model.appliance}}
+          {{model.appliance.name}}
+        {{/link-to}}
+        {{paper-icon 'chevron-right'}}
+        {{model.name}}</h2>
       <span class="flex"></span>
-      {{#paper-button mini=true aria-label="Delete" disabled=model.appliance.isActive}}
+      {{#paper-button mini=true
+                      aria-label="Delete"
+                      disabled=model.appliance.isActive
+                      onClick=(action 'deleteSensor')}}
         {{paper-icon "delete"}}
       {{/paper-button}}
     {{/toolbar.tools}}

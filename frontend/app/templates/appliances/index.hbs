@@ -3,7 +3,7 @@
     {{#toolbar.tools}}
       <h2>Appliances</h2>
       <span class="flex"></span>
-      {{#paper-button mini=true aria-label="Add"}}
+      {{#paper-button mini=true aria-label="Add" onClick=(action 'goToAddAppliance')}}
         {{paper-icon "add"}}
       {{/paper-button}}
     {{/toolbar.tools}}
@@ -14,7 +14,6 @@
         {{#paper-item
           onClick=(action "goToAppliance" appliance)}}
           <p>
-            {{paper-icon "expand-more"}}
             {{appliance.name}}
           </p>
         {{/paper-item}}

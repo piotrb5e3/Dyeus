@@ -12,6 +12,14 @@ export default Ember.Controller.extend({
     deactivate() {
       this.get('model').deactivate()
         .then(() => this.send("reloadAppliance"));
-    }
+    },
+    deleteAppliance() {
+      this.get('model').destroyRecord()
+        .then(() => this.transitionToRoute('appliances'));
+    },
+    goToAddSensor() {
+      const model = this.get('model');
+      this.transitionToRoute('appliances.detail.new-sensor', model);
+    },
   }
 });

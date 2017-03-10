@@ -30,4 +30,12 @@ export default Ember.Controller.extend({
       data: values,
     }];
   }),
+  actions: {
+    deleteSensor() {
+      const model = this.get('model');
+      const appliance = model.get('appliance');
+      this.get('model').destroyRecord()
+        .then(() => this.transitionToRoute('appliances.detail', appliance));
+    }
+  }
 });

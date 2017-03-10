@@ -5,6 +5,9 @@ export default Ember.Controller.extend({
   actions: {
     goToAppliance(appliance){
       this.transitionToRoute('appliances.detail', appliance);
-    }
+    },
+    goToAddAppliance(){
+      this.transitionToRoute('appliances.new');
+    },
   }
 });
