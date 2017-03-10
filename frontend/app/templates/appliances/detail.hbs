@@ -1,17 +1,2 @@
 {{title model.name}}
-{{#paper-list}}
-    {{#paper-item
-            onClick=(action "goToAppliances")}}
-        <p>
-            {{paper-icon "expand-less"}}
-            {{model.name}}
-        </p>
-    {{/paper-item}}
-    {{#paper-item as |controls|}}
-        {{#paper-card-content class="flex"}}
-            <div class="layout-fill layout-column">
-                {{liquid-outlet}}
-            </div>
-        {{/paper-card-content}}
-    {{/paper-item}}
-{{/paper-list}}
+{{outlet}}

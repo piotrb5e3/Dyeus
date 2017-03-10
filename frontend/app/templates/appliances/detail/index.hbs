@@ -1,19 +1,43 @@
-{{#paper-list}}
-    {{#each model.sensors as |sensor|}}
-        {{#paper-item
-                onClick=(action "goToSensor" sensor)}}
-            <p>
-                {{paper-icon "expand-more"}}
-                {{sensor.name}}
-            </p>
-        {{/paper-item}}
-    {{else}}
-        {{#paper-item}}
-            <p>This appliance has no sensors.
-                {{#link-to "appliances.new"}}
-                    Create a sensor.
-                {{/link-to}}</p>
-        {{/paper-item}}
-    {{/each}}
-{{/paper-list}}
+{{#paper-card as |card|}}
+  {{#paper-toolbar as |toolbar|}}
+    {{#toolbar.tools}}
+      <h2>{{model.name}}</h2>
+      <span class="flex"></span>
+      {{#paper-button mini=true aria-label="Delete" disabled=model.isActive}}
+        {{paper-icon "delete"}}
+      {{/paper-button}}
+    {{/toolbar.tools}}
+
+  {{/paper-toolbar}}
+  {{#card.content class="layout-column layout-fill"}}
+    <div class="layout-row">
+      <div class="layout-column">
+        {{#if model.isActive}}
+          {{#paper-button onClick=(action "deactivate")}}
+            Deactivate
+          {{/paper-button}}
+        {{else}}
+          {{#paper-button onClick=(action "activate")}}
+            Activate
+          {{/paper-button}}
+        {{/if}}
+      </div>
+      <div class="layout-column">
+        {{#cp-panel as |p|}}
+          {{#p.toggle}}
+            <p>Show auth token</p>
+          {{/p.toggle}}
+          {{#p.body}}
+            <div>
+              <p>{{model.authenticationValue}}</p>
+            </div>
+          {{/p.body}}
+        {{/cp-panel}}
+      </div>
+    </div>
+    <div class="layout-row">
+      {{sensors-list appliance=model goToSensor=(action "goToSensor")}}
+    </div>
+  {{/card.content}}
+{{/paper-card}}
 {{outlet}}

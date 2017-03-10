@@ -1,3 +1,18 @@
 {{title "Recent"}}
-{{high-charts chartOptions=chartOptions content=chartData}}
+{{#paper-card as |card|}}
+  {{#paper-toolbar as |toolbar|}}
+    {{#toolbar.tools}}
+      <h2>{{model.name}}</h2>
+      <span class="flex"></span>
+      {{#paper-button mini=true aria-label="Delete" disabled=model.appliance.isActive}}
+        {{paper-icon "delete"}}
+      {{/paper-button}}
+    {{/toolbar.tools}}
+  {{/paper-toolbar}}
+  {{#card.content class="layout-column layout-fill"}}
+    <div class="layout-row">
+      {{high-charts chartOptions=chartOptions content=chartData}}
+    </div>
+  {{/card.content}}
+{{/paper-card}}
 {{outlet}}

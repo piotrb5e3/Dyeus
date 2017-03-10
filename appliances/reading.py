@@ -1,9 +1,9 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from .models import Reading
 
 
 def new_reading(appliance):
-    timestamp = datetime.now()
+    timestamp = datetime.now(tz=timezone.utc)
     return Reading(
         appliance=appliance,
         timestamp=timestamp,

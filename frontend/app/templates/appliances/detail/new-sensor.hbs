@@ -1,0 +1,36 @@
+{{#paper-card as |card|}}
+  {{#card.title as |title|}}
+    {{#title.text as |text|}}
+      {{#text.headline}}New sensor{{/text.headline}}
+    {{/title.text}}
+  {{/card.title}}
+  {{#paper-form onSubmit=(action "submitNewSensor") as |form|}}
+    {{#card.content }}
+      <div class="layout-row">
+        <div class="layout-column flex-100">
+          {{form.input label='Name'
+                       value=model.name
+                       onChange=(action (mut model.name))
+                       required=true}}
+        </div>
+      </div>
+      <div class="layout-row">
+        <div class="layout-column flex-100">
+          {{form.input label='Code'
+                       value=model.code
+                       onChange=(action (mut model.code))
+                       required=true}}
+        </div>
+      </div>
+      {{#card.actions}}
+        {{#form.submit-button
+          primary=true
+          disabled=form.isInvalid}}
+          Submit
+        {{/form.submit-button}}
+      {{/card.actions}}
+    {{/card.content}}
+  {{/paper-form}}
+{{/paper-card}}
+{{outlet}}
+{{outlet}}

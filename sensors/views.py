@@ -5,11 +5,14 @@ from django.shortcuts import get_object_or_404
 
 from .models import Sensor
 from .serializers import SensorSerializer
+from .permissions import IsInactiveApplianceOrReadOnly
 
 
 class SensorViewSet(viewsets.ModelViewSet):
     serializer_class = SensorSerializer
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.IsAuthenticated,
+                          IsInactiveApplianceOrReadOnly,
+                          )
 
     def get_queryset(self):
         user = self.request.user

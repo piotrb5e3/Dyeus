@@ -1,0 +1,20 @@
+{{#paper-card as |card|}}
+  {{#paper-toolbar as |toolbar|}}
+    {{#toolbar.tools}}
+      <h3>Sensors</h3>
+      <span class="flex"></span>
+      {{#paper-button mini=true aria-label="Add" disabled=appliance.isActive}}
+        {{paper-icon "add"}}
+      {{/paper-button}}
+    {{/toolbar.tools}}
+  {{/paper-toolbar}}
+  {{#paper-list}}
+    {{#each appliance.sensors as |sensor|}}
+      {{sensors-list-item sensor=sensor goToSensor=goToSensor}}
+    {{else}}
+      {{#paper-item}}
+        <p>This appliance has no sensors.</p>
+      {{/paper-item}}
+    {{/each}}
+  {{/paper-list}}
+{{/paper-card}}

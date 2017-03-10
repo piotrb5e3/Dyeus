@@ -1,5 +1,8 @@
+from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, permissions, status
 from rest_framework.response import Response
+from rest_framework.decorators import detail_route
+
 from .models import Appliance
 from .serializers import ApplianceSerializer
 from .authentication import create_authentication_value
@@ -29,3 +32,23 @@ class ApplianceViewSet(viewsets.ModelViewSet):
         appliance.save()
         return Response(ApplianceSerializer(appliance).data,
                         status=status.HTTP_201_CREATED)
+
+    @detail_route(methods=['POST'])
+    def activate(self, request, pk=None):
+        appliance = get_object_or_404(Appliance, pk=pk)
+        if appliance.is_active:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        appliance.is_active = True
+        appliance.save()
+        return Response({}, status=status.HTTP_202_ACCEPTED)
+
+    @detail_route(methods=['POST'])
+    def deactivate(self, request, pk=None):
+        appliance = get_object_or_404(Appliance, pk=pk)
+        if not appliance.is_active:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        appliance.is_active = False
+        appliance.save()
+        return Response({}, status=status.HTTP_202_ACCEPTED)

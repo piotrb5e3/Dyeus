@@ -1,19 +1,32 @@
-{{#paper-list}}
-    {{#each model as |appliance|}}
+{{#paper-card as |card|}}
+  {{#paper-toolbar as |toolbar|}}
+    {{#toolbar.tools}}
+      <h2>Appliances</h2>
+      <span class="flex"></span>
+      {{#paper-button mini=true aria-label="Add"}}
+        {{paper-icon "add"}}
+      {{/paper-button}}
+    {{/toolbar.tools}}
+  {{/paper-toolbar}}
+  {{#card.content}}
+    {{#paper-list}}
+      {{#each model as |appliance|}}
         {{#paper-item
-                onClick=(action "goToAppliance" appliance)}}
-            <p>
-                {{paper-icon "expand-more"}}
-                {{appliance.name}}
-            </p>
+          onClick=(action "goToAppliance" appliance)}}
+          <p>
+            {{paper-icon "expand-more"}}
+            {{appliance.name}}
+          </p>
         {{/paper-item}}
-    {{else}}
+      {{else}}
         {{#paper-item as |controls|}}
-            <p>You have no appliances.
-                {{#link-to "appliances.new"}}
-                    Create your first appliance.
-                {{/link-to}}</p>
+          <p>You have no appliances.
+            {{#link-to "appliances.new"}}
+              Create your first appliance.
+            {{/link-to}}</p>
         {{/paper-item}}
-    {{/each}}
-{{/paper-list}}
+      {{/each}}
+    {{/paper-list}}
+  {{/card.content}}
+{{/paper-card}}
 {{outlet}}

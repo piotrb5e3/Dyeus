@@ -17,8 +17,12 @@ export default Ember.Controller.extend({
       enabled: false
     },
   },
-  chartData: Ember.computed('model', function () {
-    const values = this.get('model').values.map(([x, y]) => [Date.parse(x), parseFloat(y)]);
+  recent: {values: []},
+  recentObserver: Ember.observer('model', function () {
+    return this.get('model').recent().then((data) => this.set('recent', data));
+  }),
+  chartData: Ember.computed('recent', function () {
+    const values = this.get('recent').values.map(([x, y]) => [Date.parse(x), parseFloat(y)]);
     console.log(values);
     return [{
       type: 'line',
