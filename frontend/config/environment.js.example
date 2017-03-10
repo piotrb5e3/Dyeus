@@ -7,18 +7,12 @@ module.exports = function (environment) {
     rootURL: '/',
     locationType: 'auto',
     EmberENV: {
-      FEATURES: {
-        // Here you can enable experimental features on an ember canary build
-        // e.g. 'with-controller': true
-      }
+      FEATURES: {}
     },
     sassOptions: {
       includePaths: ['bower_components/material-design-lite/src']
     },
-    APP: {
-      // Here you can pass flags/options to your application instance
-      // when it is created
-    }
+    APP: {}
   };
 
   if (environment === 'development') {
@@ -39,7 +33,10 @@ module.exports = function (environment) {
   }
 
   if (environment === 'production') {
-
+    // Configure this for deploys
+    ENV.APP.API_HOST = '';
+    ENV.APP.API_NAMESPACE = '';
+    ENV.rootURL = '';
   }
 
   return ENV;

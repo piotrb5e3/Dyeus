@@ -1,12 +1,16 @@
 import Ember from 'ember';
 import Base from 'ember-simple-auth/authenticators/base';
+import ENV from 'frontend/config/environment';
+
+const NAMESPACE_PART = ENV.APP.API_NAMESPACE ? `/${ENV.APP.API_NAMESPACE}` : "";
+const API_BASE = `${ENV.APP.API_HOST}${NAMESPACE_PART}`;
 
 export default Base.extend({
   ajax: Ember.inject.service(),
 
-  authenticatePath: 'http://localhost:8000/auth/gettoken',
-  testPath: 'http://localhost:8000/auth/test',
-  getUserDataPath: 'http://localhost:8000/user',
+  authenticatePath: `${API_BASE}/auth/gettoken`,
+  testPath: `${API_BASE}/auth/test`,
+  getUserDataPath: `${API_BASE}/user`,
 
   restore(data) {
     return this.get('ajax').request(this.get("testPath"), {
