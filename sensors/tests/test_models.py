@@ -1,12 +1,13 @@
-from datetime import datetime, timezone
+from random import random
 from faker import Faker
 from django.test import TestCase
 from django.core.exceptions import ValidationError
 
 from sensors.models import Sensor, SensorValue
 
-from appliances.tests.factory import create_appliance
+from appliances.tests.factory import create_appliance, create_reading
 from users.tests.factory import create_regular_dyeus_user
+from sensors.tests.factory import create_sensor
 
 fake = Faker()
 
@@ -57,3 +58,38 @@ class TestSensorModel(TestCase):
                    name=name,
                    appliance=self.appliance)
         self.assertRaises(ValidationError, s.save)
+
+
+class TestSensorValueModel(TestCase):
+    user = None
+    appliance = None
+    sensor = None
+    reading = None
+
+    def setUp(self):
+        self.user = create_regular_dyeus_user()
+        self.appliance = create_appliance(self.user)
+        self.sensor = create_sensor(self.appliance)
+        self.reading = create_reading(self.appliance)
+
+    def test_can_create_sensor_value(self):
+        sv = SensorValue(sensor=self.sensor,
+                         reading=self.reading,
+                         value=str(random()))
+        sv.save()
+
+    def test_raises_on_duplicate_reading_for_sensor_in_reading(self):
+        sv = SensorValue(sensor=self.sensor,
+                         reading=self.reading,
+                         value=str(random()))
+        sv.save()
+        sv = SensorValue(sensor=self.sensor,
+                         reading=self.reading,
+                         value=str(random()))
+        self.assertRaises(ValidationError, sv.save)
+
+    def test_raises_on_empty_string_value(self):
+        sv = SensorValue(sensor=self.sensor,
+                         reading=self.reading,
+                         value="")
+        self.assertRaises(ValidationError, sv.save)
