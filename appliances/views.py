@@ -35,7 +35,8 @@ class ApplianceViewSet(viewsets.ModelViewSet):
 
     @detail_route(methods=['POST'])
     def activate(self, request, pk=None):
-        appliance = get_object_or_404(Appliance, pk=pk)
+        appliance = get_object_or_404(Appliance, pk=pk, owner=request.user)
+
         if appliance.is_active:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
@@ -45,7 +46,8 @@ class ApplianceViewSet(viewsets.ModelViewSet):
 
     @detail_route(methods=['POST'])
     def deactivate(self, request, pk=None):
-        appliance = get_object_or_404(Appliance, pk=pk)
+        appliance = get_object_or_404(Appliance, pk=pk, owner=request.user)
+
         if not appliance.is_active:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 

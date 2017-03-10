@@ -68,6 +68,18 @@ class TestUnauthenticatedAppliancesViews(APITestCase):
         response = self.client.put(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
+    def test_cant_deactivate_appliance(self):
+        url = reverse('appliance-deactivate', args=(self.appliance1.pk,))
+
+        response = self.client.post(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_cant_activate_appliance(self):
+        url = reverse('appliance-activate', args=(self.appliance1.pk,))
+
+        response = self.client.post(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
 
 class TestAuthenticatedApplianceViews(APITestCase):
     user1 = None
@@ -75,6 +87,7 @@ class TestAuthenticatedApplianceViews(APITestCase):
     appliance1 = None
     appliance2 = None
     appliance3 = None
+    appliance4 = None
     sensor1 = None
     sensor2 = None
     sensor3 = None
@@ -85,10 +98,15 @@ class TestAuthenticatedApplianceViews(APITestCase):
         self.sensor1 = create_sensor(self.appliance1)
         self.sensor2 = create_sensor(self.appliance1)
         self.appliance2 = create_appliance(self.user1)
+        self.appliance2.is_active = True
+        self.appliance2.save()
 
         self.user2 = create_regular_dyeus_user()
         self.appliance3 = create_appliance(self.user2)
         self.sensor3 = create_sensor(self.appliance3)
+        self.appliance4 = create_appliance(self.user2)
+        self.appliance4.is_active = True
+        self.appliance4.save()
 
         (token, _) = Token.objects.get_or_create(user=self.user1)
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
@@ -175,3 +193,51 @@ class TestAuthenticatedApplianceViews(APITestCase):
 
         appliances = Appliance.objects.filter(id=self.appliance3.id)
         self.assertEqual(appliances.count(), 1)
+
+    def test_can_activate_appliance(self):
+        aid = self.appliance1.id
+        url = reverse('appliance-activate', args=(aid,))
+        self.assertEqual(Appliance.objects.get(pk=aid).is_active, False)
+        response = self.client.post(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_202_ACCEPTED)
+        self.assertEqual(Appliance.objects.get(pk=aid).is_active, True)
+
+    def test_can_deactivate_appliance(self):
+        aid = self.appliance2.id
+        url = reverse('appliance-deactivate', args=(aid,))
+        self.assertEqual(Appliance.objects.get(pk=aid).is_active, True)
+        response = self.client.post(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_202_ACCEPTED)
+        self.assertEqual(Appliance.objects.get(pk=aid).is_active, False)
+
+    def test_cant_activate_active_appliance(self):
+        aid = self.appliance2.id
+        url = reverse('appliance-activate', args=(aid,))
+        self.assertEqual(Appliance.objects.get(pk=aid).is_active, True)
+        response = self.client.post(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(Appliance.objects.get(pk=aid).is_active, True)
+
+    def test_cant_deactivate_inactive_appliance(self):
+        aid = self.appliance1.id
+        url = reverse('appliance-deactivate', args=(aid,))
+        self.assertEqual(Appliance.objects.get(pk=aid).is_active, False)
+        response = self.client.post(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(Appliance.objects.get(pk=aid).is_active, False)
+
+    def test_cant_activate_other_user_appliance(self):
+        aid = self.appliance3.id
+        url = reverse('appliance-activate', args=(aid,))
+        self.assertEqual(Appliance.objects.get(pk=aid).is_active, False)
+        response = self.client.post(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(Appliance.objects.get(pk=aid).is_active, False)
+
+    def test_cant_deactivate_other_user_appliance(self):
+        aid = self.appliance4.id
+        url = reverse('appliance-deactivate', args=(aid,))
+        self.assertEqual(Appliance.objects.get(pk=aid).is_active, True)
+        response = self.client.post(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(Appliance.objects.get(pk=aid).is_active, True)
