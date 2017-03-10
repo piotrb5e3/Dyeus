@@ -16,16 +16,13 @@ class SensorViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
-        if self.request.user.is_authenticated:
-            return Sensor.objects.filter(appliance__owner=user)
-        return []
+        return Sensor.objects.filter(appliance__owner=user)
 
     @detail_route(methods=['get'])
     def recent(self, request, pk=None):
         user = request.user
-        sensor = get_object_or_404(Sensor, pk=pk)
-        if not sensor.appliance.owner == user:
-            return Response(status=status.HTTP_401_UNAUTHORIZED)
+        sensor = get_object_or_404(Sensor, pk=pk,
+                                   appliance__owner=user)
 
         q = sensor.sensor_values.all().order_by('-reading__timestamp')
         q = q.values_list('reading__timestamp', 'value')

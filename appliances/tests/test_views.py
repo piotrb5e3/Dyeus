@@ -110,7 +110,6 @@ class TestAuthenticatedApplianceViews(APITestCase):
 
         (token, _) = Token.objects.get_or_create(user=self.user1)
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
-        pass
 
     def test_can_see_only_own_appliances(self):
         url = reverse('appliance-list')
