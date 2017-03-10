@@ -3,5 +3,5 @@ from django.conf.urls import url
 from .views import token_collect
 
 urlpatterns = [
-    url(r'^collect/token', token_collect),
+    url(r'^collect/token', token_collect, name="collect-by-token"),
 ]
