@@ -1,0 +1,41 @@
+import os
+from base_settings import *
+
+with open(os.path.join(BASE_DIR, 'dyeus/secretkey.txt')) as f:
+    SECRET_KEY = f.read().strip()
+
+DEBUG = False
+
+ALLOWED_HOSTS = ['www.0bit.pw', '0bit.pw']
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'dyeus-dev',
+        'USER': 'dyeus-dev',
+        'PASSWORD': '',
+        'HOST': 'localhost',
+        'PORT': '5432',
+    }
+}
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'logging/dyeus-dev.log'),
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
+
+CORS_ORIGIN_ALLOW_ALL = False
