@@ -1,7 +1,7 @@
 {
   "name": "frontend",
-  "version": "0.0.0",
-  "description": "Small description for frontend goes here",
+  "version": "0.0.1",
+  "description": "Dyeus frontend",
   "private": true,
   "directories": {
     "doc": "doc",
