@@ -148,7 +148,7 @@ class TestGCMCollectViews(APITestCase):
     sensor4 = None
     url = None
     id_int = None
-    hex_id = None
+    bytes_id = None
 
     def setUp(self):
         self.user = create_regular_dyeus_user()
@@ -164,7 +164,7 @@ class TestGCMCollectViews(APITestCase):
         self.url = reverse('collect-by-gcm-aes')
 
         self.id_int = self.appliance.id
-        self.hex_id = binascii.hexlify(str(self.id_int).encode())
+        self.bytes_id = str(self.id_int).encode()
 
     def test_can_submit_reading(self):
         sensors = {
@@ -288,7 +288,7 @@ class TestGCMCollectViews(APITestCase):
             modes.GCM(iv),
             backend=default_backend(),
         ).encryptor()
-        associated_data = hex_iv + b'ff' + self.hex_id
+        associated_data = hex_iv + b'ff' + self.bytes_id
         enc.authenticate_additional_data(associated_data)
         ciphertext = enc.update(sensors_bytes) + enc.finalize()
         hex_ciphertext = binascii.hexlify(ciphertext)

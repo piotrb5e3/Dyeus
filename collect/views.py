@@ -58,8 +58,8 @@ def gcm_aes_collect(request):
 
     try:
         hex_key = appliance.authentication_value
-        hex_id = binascii.hexlify(str(int_id).encode())
-        decrypted_sensors = aes128_gcm_decrypt(hex_key, hex_id, hex_iv,
+        bytes_id = str(int_id).encode()
+        decrypted_sensors = aes128_gcm_decrypt(hex_key, bytes_id, hex_iv,
                                                encrypted_sensors,
                                                hex_tag)
         sensors = json.loads(decrypted_sensors)

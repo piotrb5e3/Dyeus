@@ -35,12 +35,12 @@ def aes128_gcm_encrypt(hex_key, plaintext):
     return hex_iv, hex_ciphertext, hex_tag
 
 
-def aes128_gcm_decrypt(hex_key, hex_id, hex_iv, hex_ciphertext, hex_tag):
+def aes128_gcm_decrypt(hex_key, bytes_id, hex_iv, hex_ciphertext, hex_tag):
     key = binascii.unhexlify(hex_key)
     ciphertext = binascii.unhexlify(hex_ciphertext)
     tag = binascii.unhexlify(hex_tag)
     iv = binascii.unhexlify(hex_iv)
-    associated_data = hex_iv + b'ff' + hex_id
+    associated_data = hex_iv + b'ff' + bytes_id
 
     decryptor = Cipher(
         algorithms.AES(key),

@@ -95,17 +95,17 @@ def _helper_enc():
     id = str(randint(1, 2 ** 31)).encode()
     hex_key = binascii.hexlify(key)
     hex_iv = binascii.hexlify(iv)
-    hex_id = binascii.hexlify(id)
+    bytes_id = str(id).encode()
     enc = Cipher(
         algorithms.AES(key),
         modes.GCM(iv),
         backend=default_backend(),
     ).encryptor()
-    enc.authenticate_additional_data(hex_iv + b'ff' + hex_id)
+    enc.authenticate_additional_data(hex_iv + b'ff' + bytes_id)
     ciphertext = enc.update(plaintext) + enc.finalize()
     hex_ciphertext = binascii.hexlify(ciphertext)
     hex_tag = binascii.hexlify(enc.tag)
-    return hex_ciphertext, hex_id, hex_iv, hex_key, hex_tag, plaintext
+    return hex_ciphertext, bytes_id, hex_iv, hex_key, hex_tag, plaintext
 
 
 def _hex_mangle(to_mangle):
