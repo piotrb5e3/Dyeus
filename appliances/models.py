@@ -5,6 +5,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 
 AUTH_MODEL_CHOICES = [
     ('token', 'Token'),
+    ('gcm_aes', 'GCM + AES128')
 ]
 
 
