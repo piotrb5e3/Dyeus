@@ -1,0 +1,106 @@
+{{#paper-card as |card|}}
+  {{#paper-toolbar as |toolbar|}}
+    {{#toolbar.tools}}
+      <h2>About</h2>
+    {{/toolbar.tools}}
+  {{/paper-toolbar}}
+  {{#card.content}}
+    <h3>FAQ</h3>
+    <h4>What is Dyeus?</h4>
+    <p>
+      Dyeus is an open source platform for gathering and displaying sensory data and making recommendations based on
+      preset rules.<br>
+      It is named after the chief deity in the religious traditions of the prehistoric Proto-Indo-European societies.
+      (see <a href="https://en.wikipedia.org/wiki/Dyeus">Wikipedia</a>)
+    </p>
+    <h4>What is the current development status of Dyeus?</h4>
+    <p>
+      Dyeus is still in development. In terms of features it's in alpha.<br>
+      The API is not stable yet.
+    </p>
+    <h4>Can I use Dyeus?</h4>
+    <p>
+      Yes! Dyeus is GPL licensed. Check out the source on
+      <a href="https://github.com/piotrb5e3/Dyeus">
+        Github
+      </a>
+    </p>
+    <h4>I want feature X!</h4>
+    <p>
+      Dyeus is an after-hours project for me. You are welcome to help by submitting pull requests,
+      reporting bugs and pestering me about new features.<br>
+      You can contact me at <a href="mailto:piotrb5e3@gmail.com">piotrb5e3@gmail.com</a>
+    </p>
+    <h3>API</h3>
+    <h4>Token authentication</h4>
+    <p>SmartToaster appliance with token <code>iBWNgR92luZ/+tDEH8Nxbw</code> and 3 sensors:</p>
+    <ol>
+      <li>ToastTemp, reading: 40.34&#176;C, code:
+        <code>toastt</code>
+      </li>
+      <li>AmbientTemp, reading: 17.52&#176;C, code:
+        <code>ambientt</code>
+      </li>
+      <li>ToastHumidity, reading: 30%, code:
+        <code>toasth</code>
+      </li>
+    </ol>
+    <p>
+      Endpoint location: <code>https://0bit.pw/dyeus/api/collect/token/</code><br>
+      Payload:
+    </p>
+    <pre>{
+  "token": "iBWNgR92luZ/+tDEH8Nxbw",
+  "sensors": {
+    "toastt": "40.34",
+    "ambientt": "17.52",
+    "toasth": "30"
+  }
+}</pre>
+    <h4>GCM AES authentication</h4>
+    <p>SmartToaster appliance with encryption key
+      <code>b2369d109f56b7c3a39738a8231410a4</code><sub><code>16</code></sub>, id <code>1337</code>
+      and 3 sensors:</p>
+    <ol>
+      <li>ToastTemp, reading: 40.34&#176;C, code:
+        <code>toastt</code>
+      </li>
+      <li>AmbientTemp, reading: 17.52&#176;C, code:
+        <code>ambientt</code>
+      </li>
+      <li>ToastHumidity, reading: 30%, code:
+        <code>toasth</code>
+      </li>
+    </ol>
+    <p>Encryption steps:</p>
+    <ol>
+      <li>Generate a 96-bit iv (nonce). Example: <code>85a7028ab17079d20c02c782</code><sub><code>16</code></sub></li>
+      <li>Construct a string JSON data with sensor values. Example:
+        <pre>{
+  "toastt": "40.34",
+  "ambientt": "17.52",
+  "toasth": "30"
+}</pre>
+      </li>
+      <li>Construct additional authenticated data string: <code>hex_iv + "ff" + decimal_id</code>.
+        Example: <code>85a7028ab17079d20c02c782ff1337</code></li>
+      <li>Encrypt the JSON with AES128 in GCM mode with given key, iv and additional authenticated data. Example:
+        <pre>7c9cba096a39356acea1e610bf3591139e774aefffbce02e7fc27da441e91f4c
+957f10224508bb5f571c1dbbad463d781719069fdd16b31bdeef1421ee5c2312</pre>
+      </li>
+      <li>Calculate the tag. Example: <code>13edc75a1dd962ba884b4525052e31f5</code></li>
+    </ol>
+    <p>
+      Endpoint location: <code>https://0bit.pw/dyeus/api/collect/gcm-aes/</code><br>
+      Payload (line wrapped):
+    </p>
+    <pre>{
+  "id": 1337,
+  "iv": "85a7028ab17079d20c02c782",
+  "tag": "13edc75a1dd962ba884b4525052e31f5",
+  "sensors": "7c9cba096a39356acea1e610bf3591139e774aefffbce02e7fc27da441e91f4c
+      957f10224508bb5f571c1dbbad463d781719069fdd16b31bdeef1421ee5c2312"
+}</pre>
+  {{/card.content}}
+{{/paper-card}}
+{{outlet}}

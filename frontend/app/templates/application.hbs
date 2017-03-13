@@ -8,6 +8,9 @@
     {{/paper-toolbar}}
     {{#paper-content}}
       {{#paper-list}}
+        {{#paper-item onClick=(action "goToRoute" "about")}}
+          About
+        {{/paper-item}}
         {{#paper-item onClick=(action "goToRoute" "appliances")}}
           Appliances
         {{/paper-item}}
