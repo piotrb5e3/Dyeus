@@ -53,7 +53,7 @@ class TestCollectViews(APITestCase):
             }
         }
         response = self.client.post(self.url, data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
         readings = Reading.objects.filter(appliance=self.appliance)
         self.assertEqual(readings.count(), 0)
