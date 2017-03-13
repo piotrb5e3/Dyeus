@@ -1,4 +1,3 @@
-import binascii
 import json
 
 from rest_framework.decorators import api_view
@@ -62,7 +61,7 @@ def gcm_aes_collect(request):
         decrypted_sensors = aes128_gcm_decrypt(hex_key, bytes_id, hex_iv,
                                                encrypted_sensors,
                                                hex_tag)
-        sensors = json.loads(decrypted_sensors)
+        sensors = json.loads(decrypted_sensors.decode())
         new_reading_from_data(appliance, sensors)
         return Response(status=status.HTTP_202_ACCEPTED)
 
@@ -70,5 +69,5 @@ def gcm_aes_collect(request):
         return Response(status=status.HTTP_400_BAD_REQUEST)
     except ReadingException:
         return Response(status=status.HTTP_400_BAD_REQUEST)
-    except json.decoder.JSONDecodeError:
+    except ValueError:
         return Response(status=status.HTTP_400_BAD_REQUEST)
