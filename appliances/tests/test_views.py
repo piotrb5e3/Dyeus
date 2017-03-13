@@ -145,6 +145,21 @@ class TestAuthenticatedApplianceViews(APITestCase):
                                               owner=self.user1)
         self.assertEqual(appliances.count(), 1)
 
+    def test_can_create_appliance_with_gcm(self):
+        url = reverse('appliance-list')
+        data = {
+            'name': fake.name(),
+            'authentication_model': 'gcm_aes',
+        }
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        appliances = Appliance.objects.filter(name=data['name'],
+                                              owner=self.user1)
+        self.assertEqual(appliances.count(), 1)
+        a = appliances.first()
+        self.assertEqual(len(a.authentication_value), 32)
+
     def test_can_change_appliance(self):
         url = reverse('appliance-detail', args=(self.appliance1.id,))
         data = {
