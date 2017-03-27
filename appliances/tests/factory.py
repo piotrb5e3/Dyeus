@@ -30,8 +30,9 @@ def create_gcm_authenticated_appliance(owner):
     return a
 
 
-def create_reading(appliance):
-    timestamp = fake.date_time_this_month(tzinfo=timezone.utc)
+def create_reading(appliance, timestamp=None):
+    if timestamp is None:
+        timestamp = fake.date_time_this_month(tzinfo=timezone.utc)
     r = Reading(
         appliance=appliance,
         year=timestamp.year,

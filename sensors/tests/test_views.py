@@ -1,12 +1,13 @@
 import json
+from datetime import datetime, timezone
 from faker import Faker
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 from rest_framework.authtoken.models import Token
 
-from appliances.tests.factory import create_appliance
-from sensors.tests.factory import create_sensor
+from appliances.tests.factory import create_appliance, create_reading
+from sensors.tests.factory import create_sensor, create_sensor_value
 from users.tests.factory import create_regular_dyeus_user
 
 from sensors.models import Sensor
@@ -232,3 +233,21 @@ class TestAuthenticatedSensorsViews(APITestCase):
 
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_recent_returns_last_readings(self):
+        ctr = 0
+        for mn in range(3):
+            for sc in range(60):
+                timestamp = datetime(year=2017, month=6, day=5, hour=12,
+                                     minute=mn, second=sc, tzinfo=timezone.utc)
+                r = create_reading(self.appliance, timestamp)
+                create_sensor_value(self.sensor, r, value=ctr)
+                ctr += 1
+
+        url = reverse('sensor-recent', args=(self.sensor.pk,))
+
+        response = self.client.get(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(
+            [int(v) for (t, v) in json.loads(response.content)['values']],
+            [i for i in range(80, 180)])

@@ -26,5 +26,6 @@ class SensorViewSet(viewsets.ModelViewSet):
 
         q = sensor.sensor_values.all().order_by('-reading__timestamp')
         q = q.values_list('reading__timestamp', 'value')
-        values = q[:100]
-        return Response({'values': [[v[0], v[1]] for v in values.reverse()], })
+        values = list(q[:100])
+        values.reverse()
+        return Response({'values': [[v[0], v[1]] for v in values], })
