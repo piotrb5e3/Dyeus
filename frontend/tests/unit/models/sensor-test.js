@@ -1,12 +1,11 @@
-import { moduleForModel, test } from 'ember-qunit';
+import {moduleForModel, test} from 'ember-qunit';
 
 moduleForModel('sensor', 'Unit | Model | sensor', {
   // Specify the other units that are required for this test.
-  needs: []
+  needs: ['model:appliance']
 });
 
-test('it exists', function(assert) {
+test('it exists', function (assert) {
   let model = this.subject();
-  // let store = this.store();
   assert.ok(!!model);
 });

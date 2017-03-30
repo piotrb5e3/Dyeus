@@ -1,25 +1,24 @@
-import { moduleForComponent, test } from 'ember-qunit';
+import {moduleForComponent, test} from 'ember-qunit';
 import hbs from 'htmlbars-inline-precompile';
 
 moduleForComponent('sensors-list-item', 'Integration | Component | sensors list item', {
   integration: true
 });
 
-test('it renders', function(assert) {
+test('it renders', function (assert) {
+  this.set('sensor', {
+    id: 0,
+    name: "S0",
+    code: "s0",
+    appliance: 0,
+  });
 
-  // Set any properties with this.set('myProperty', 'value');
-  // Handle any actions with this.on('myAction', function(val) { ... });
+  this.on('goToSensor', function () {
+  });
 
-  this.render(hbs`{{sensors-list-item}}`);
+  this.render(hbs`{{sensors-list-item sensor=sensor goToSensor=(action 'goToSensor')}}`);
 
-  assert.equal(this.$().text().trim(), '');
+  assert.ok(this.$().text().trim().includes("S0"));
+  assert.notOk(this.$().text().trim().includes("S1"));
 
-  // Template block usage:
-  this.render(hbs`
-    {{#sensors-list-item}}
-      template block text
-    {{/sensors-list-item}}
-  `);
-
-  assert.equal(this.$().text().trim(), 'template block text');
 });
