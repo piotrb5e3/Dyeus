@@ -11,12 +11,17 @@
         {{#paper-item onClick=(action "goToRoute" "about")}}
           About
         {{/paper-item}}
-        {{#paper-item onClick=(action "goToRoute" "appliances")}}
-          Appliances
-        {{/paper-item}}
+
         {{#if session.isAuthenticated}}
+          {{#paper-item onClick=(action "goToRoute" "appliances")}}
+            Appliances
+          {{/paper-item}}
           {{#paper-item onClick=(action "logout")}}
-            Logout
+            Log out
+          {{/paper-item}}
+        {{else}}
+          {{#paper-item onClick=(action "goToRoute" "login")}}
+            Log in
           {{/paper-item}}
         {{/if}}
       {{/paper-list}}
