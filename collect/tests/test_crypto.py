@@ -23,7 +23,8 @@ class TestCrypto(APITestCase):
         key = os.urandom(16)
 
         hex_key = binascii.hexlify(key)
-        hex_iv, hex_ciphertext, hex_tag = aes128_gcm_encrypt(hex_key, plaintext)
+        hex_iv, hex_ciphertext, hex_tag = aes128_gcm_encrypt(hex_key,
+                                                             plaintext)
 
         iv = binascii.unhexlify(hex_iv)
         tag = binascii.unhexlify(hex_tag)
@@ -43,47 +44,47 @@ class TestCrypto(APITestCase):
         self.assertEqual(plaintext, decrypted_plaintext)
 
     def test_can_decrypt(self):
-        hex_ciphtxt, hex_id, hex_iv, hex_key, hex_tag, plaintext = _helper_enc()
+        hex_ctxt, hex_id, hex_iv, hex_key, hex_tag, plaintext = _helper_enc()
 
         decrypted_plaintext = aes128_gcm_decrypt(hex_key, hex_id, hex_iv,
-                                                 hex_ciphtxt, hex_tag)
+                                                 hex_ctxt, hex_tag)
 
         self.assertEqual(plaintext, decrypted_plaintext)
 
     def test_raises_on_bad_tag(self):
-        hex_ciphtxt, hex_id, hex_iv, hex_key, hex_tag, plaintext = _helper_enc()
+        hex_ctxt, hex_id, hex_iv, hex_key, hex_tag, plaintext = _helper_enc()
         bad_tag = _hex_mangle(hex_tag)
 
         self.assertRaises(CryptoException, aes128_gcm_decrypt, hex_key, hex_id,
-                          hex_iv, hex_ciphtxt, bad_tag)
+                          hex_iv, hex_ctxt, bad_tag)
 
     def test_raises_on_bad_ciphertext(self):
-        hex_ciphtxt, hex_id, hex_iv, hex_key, hex_tag, plaintext = _helper_enc()
+        hex_ctxt, hex_id, hex_iv, hex_key, hex_tag, plaintext = _helper_enc()
         bad_ciphtxt = _hex_mangle(hex_tag)
 
         self.assertRaises(CryptoException, aes128_gcm_decrypt, hex_key, hex_id,
                           hex_iv, bad_ciphtxt, hex_tag)
 
     def test_raises_on_bad_iv(self):
-        hex_ciphtxt, hex_id, hex_iv, hex_key, hex_tag, plaintext = _helper_enc()
+        hex_ctxt, hex_id, hex_iv, hex_key, hex_tag, plaintext = _helper_enc()
         bad_iv = _hex_mangle(hex_iv)
 
         self.assertRaises(CryptoException, aes128_gcm_decrypt, hex_key, hex_id,
-                          bad_iv, hex_ciphtxt, hex_tag)
+                          bad_iv, hex_ctxt, hex_tag)
 
     def test_raises_on_bad_id(self):
-        hex_ciphtxt, hex_id, hex_iv, hex_key, hex_tag, plaintext = _helper_enc()
+        hex_ctxt, hex_id, hex_iv, hex_key, hex_tag, plaintext = _helper_enc()
         bad_id = _hex_mangle(hex_id)
 
         self.assertRaises(CryptoException, aes128_gcm_decrypt, hex_key, bad_id,
-                          hex_iv, hex_ciphtxt, hex_tag)
+                          hex_iv, hex_ctxt, hex_tag)
 
     def test_raises_on_bad_key(self):
-        hex_ciphtxt, hex_id, hex_iv, hex_key, hex_tag, plaintext = _helper_enc()
+        hex_ctxt, hex_id, hex_iv, hex_key, hex_tag, plaintext = _helper_enc()
         bad_key = _hex_mangle(hex_key)
 
         self.assertRaises(CryptoException, aes128_gcm_decrypt, bad_key, hex_id,
-                          hex_iv, hex_ciphtxt, hex_tag)
+                          hex_iv, hex_ctxt, hex_tag)
 
     def test_sha256_mac(self):
         plaintext = fake.sentence(nb_words=20).encode()

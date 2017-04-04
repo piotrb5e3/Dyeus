@@ -1,6 +1,6 @@
-from .local_settings import *
+from .local_settings import *  # noqa F403
 
-DATABASES['default'] = {
+DATABASES['default'] = {  # noqa F405
     'ENGINE': 'django.db.backends.sqlite3',
     'NAME': ':memory:',
 }

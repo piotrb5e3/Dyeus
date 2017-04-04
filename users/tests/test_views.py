@@ -1,12 +1,9 @@
 import json
-from faker import Faker
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 from rest_framework.authtoken.models import Token
 
-from appliances.tests.factory import create_appliance
-from sensors.tests.factory import create_sensor
 from users.tests.factory import create_regular_dyeus_user
 
 

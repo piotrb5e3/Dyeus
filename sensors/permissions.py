@@ -14,8 +14,8 @@ class IsInactiveApplianceOrReadOnly(BasePermission):
             return s.count() == 1 and not s.first().appliance.is_active
 
         if (request.method == 'PUT'
-            and 'appliance' in request.data
-            and 'pk' in view.kwargs):
+                and 'appliance' in request.data
+                and 'pk' in view.kwargs):
             a_old = Appliance.objects.filter(pk=view.kwargs['pk'],
                                              owner=request.user)
             a_new = Appliance.objects.filter(pk=request.data['appliance'],
