@@ -1,5 +1,6 @@
 import os
 import binascii
+import base64
 
 from datetime import timezone
 from faker import Faker
@@ -24,6 +25,17 @@ def create_gcm_authenticated_appliance(owner):
         name=fake.name(),
         authentication_model='gcm_aes',
         authentication_value=binascii.hexlify(os.urandom(16)),
+        owner=owner
+    )
+    a.save()
+    return a
+
+
+def create_sha_authenticated_appliance(owner):
+    a = Appliance(
+        name=fake.name(),
+        authentication_model='sha_hmac',
+        authentication_value=base64.b64encode(os.urandom(32)),
         owner=owner
     )
     a.save()

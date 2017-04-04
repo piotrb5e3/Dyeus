@@ -5,7 +5,8 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 
 AUTH_MODEL_CHOICES = [
     ('token', 'Token'),
-    ('gcm_aes', 'GCM + AES128')
+    ('gcm_aes', 'GCM + AES128'),
+    ('sha_hmac', 'SHA256 HMAC')
 ]
 
 
@@ -14,7 +15,7 @@ class Appliance(models.Model):
     is_active = models.BooleanField(default=False)
     authentication_model = models.CharField(max_length=16,
                                             choices=AUTH_MODEL_CHOICES)
-    authentication_value = models.CharField(max_length=32, unique=True)
+    authentication_value = models.CharField(max_length=64, unique=True)
     owner = models.ForeignKey('users.DyeusUser', on_delete=models.CASCADE,
                               related_name='appliances')
 

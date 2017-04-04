@@ -5,11 +5,11 @@ from appliances.models import Reading
 from sensors.models import SensorValue
 
 
-def new_reading_from_data(appliance, sensors):
+def new_reading_from_data(appliance, sensors, timestamp=None):
     appliance_sensors = appliance.sensors.all()
 
     with transaction.atomic():
-        reading = _new_reading(appliance)
+        reading = _new_reading(appliance, timestamp)
         reading.save()
         for sensor in appliance_sensors:
             if sensor.code not in sensors:
@@ -21,8 +21,10 @@ def new_reading_from_data(appliance, sensors):
             sv.save()
 
 
-def _new_reading(appliance):
-    timestamp = datetime.now(tz=timezone.utc)
+def _new_reading(appliance, timestamp):
+    if timestamp is None:
+        timestamp = datetime.now(tz=timezone.utc)
+
     return Reading(
         appliance=appliance,
         timestamp=timestamp,
