@@ -5,7 +5,6 @@ from rest_framework.decorators import detail_route
 
 from .models import Appliance
 from .serializers import ApplianceSerializer
-from .authentication import create_authentication_value
 
 
 class ApplianceViewSet(viewsets.ModelViewSet):
@@ -19,17 +18,18 @@ class ApplianceViewSet(viewsets.ModelViewSet):
     def create(self, request):
         data = request.data
         serializer = ApplianceSerializer(data=data)
+
         if not serializer.is_valid():
             return Response(serializer.error_messages,
                             status=status.HTTP_400_BAD_REQUEST)
-        auth_model = serializer.validated_data['authentication_model']
 
         appliance = Appliance(
             name=serializer.validated_data['name'],
-            authentication_model=auth_model,
-            authentication_value=create_authentication_value(auth_model),
+            authentication_model=(
+                serializer.validated_data['authentication_model']),
             owner=request.user)
         appliance.save()
+
         return Response(ApplianceSerializer(appliance).data,
                         status=status.HTTP_201_CREATED)
 
@@ -38,6 +38,9 @@ class ApplianceViewSet(viewsets.ModelViewSet):
         appliance = get_object_or_404(Appliance, pk=pk, owner=request.user)
 
         if appliance.is_active:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        if not appliance.authentication_value:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
         appliance.is_active = True

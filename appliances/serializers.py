@@ -11,4 +11,5 @@ class ApplianceSerializer(serializers.ModelSerializer):
         model = Appliance
         fields = ('id', 'name', 'sensors', 'is_active', 'authentication_model',
                   'authentication_value')
-        read_only_fields = ('sensors', 'is_active', 'authentication_value')
+        read_only_fields = ('sensors', 'is_active')
+        extra_kwargs = {'authentication_value': {'write_only': True}}

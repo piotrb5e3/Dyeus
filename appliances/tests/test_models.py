@@ -1,7 +1,11 @@
+import os
+import base64
+
 from datetime import datetime, timezone
 from faker import Faker
 from django.test import TestCase
 from django.core.exceptions import ValidationError
+from django.db.utils import IntegrityError
 
 from appliances.models import Appliance, Reading
 from appliances.tests.factory import create_appliance
@@ -20,13 +24,13 @@ class TestApplianceModel(TestCase):
 
     def test_create_appliance(self):
         name = fake.catch_phrase()
-        token = fake.password(length=22)
+        token = base64.b64encode(os.urandom(32)).decode()
         a = Appliance(
             name=name,
             authentication_model='token',
             authentication_value=token,
             owner=self.user
-        )
+            )
         a.save()
 
         appliances = Appliance.objects.filter(name=name, owner=self.user)
@@ -36,41 +40,58 @@ class TestApplianceModel(TestCase):
         self.assertEqual(a.authentication_value, token)
         self.assertEqual(a.is_active, False)
 
+    def test_create_appliance_no_auth_value(self):
+        name = fake.catch_phrase()
+        a = Appliance(
+            name=name,
+            authentication_model='token',
+            owner=self.user
+            )
+        a.save()
+
+        appliances = Appliance.objects.filter(name=name, owner=self.user)
+        self.assertEqual(appliances.count(), 1)
+        a = appliances.first()
+        self.assertEqual(a.authentication_model, 'token')
+        self.assertEqual(a.is_active, False)
+
     def test_raises_on_repeated_name_with_same_owner(self):
         name = fake.catch_phrase()
         a = Appliance(
             name=name,
             authentication_model='token',
-            authentication_value=fake.password(length=22),
+            authentication_value=base64.b64encode(os.urandom(32)),
             owner=self.user
-        )
+            )
         a.save()
 
         a = Appliance(
             name=name,
             authentication_model='token',
-            authentication_value=fake.password(length=22),
+            authentication_value=base64.b64encode(os.urandom(32)),
             owner=self.user
-        )
+            )
         self.assertRaises(ValidationError, a.save)
 
-    def test_raises_on_repeated_authentication_value(self):
-        auth_val = fake.password(length=22)
+    def test_raises_on_too_weak_authentication_value(self):
+        name = fake.catch_phrase()
         a = Appliance(
-            name=fake.catch_phrase(),
+            name=name,
             authentication_model='token',
-            authentication_value=auth_val,
+            authentication_value=base64.b64encode(os.urandom(10)),
             owner=self.user
-        )
-        a.save()
-
-        a = Appliance(
-            name=fake.catch_phrase(),
-            authentication_model='token',
-            authentication_value=auth_val,
-            owner=self.user2
-        )
+            )
         self.assertRaises(ValidationError, a.save)
+
+    def test_raises_on_null_authentication_value(self):
+        name = fake.catch_phrase()
+        a = Appliance(
+            name=name,
+            authentication_model='token',
+            authentication_value=None,
+            owner=self.user
+            )
+        self.assertRaises(IntegrityError, a.save)
 
 
 class TestReadingModel(TestCase):
@@ -93,7 +114,7 @@ class TestReadingModel(TestCase):
             second=timestamp.second,
             microsecond=timestamp.microsecond,
             timestamp=timestamp
-        )
+            )
         r.save()
 
         readings = Reading.objects.filter(timestamp=timestamp)
@@ -114,7 +135,7 @@ class TestReadingModel(TestCase):
             second=timestamp.second,
             microsecond=timestamp.microsecond,
             timestamp=timestamp
-        )
+            )
         self.assertRaises(ValidationError, r.save)
 
     def test_raises_on_wrong_month(self):
@@ -129,7 +150,7 @@ class TestReadingModel(TestCase):
             second=timestamp.second,
             microsecond=timestamp.microsecond,
             timestamp=timestamp
-        )
+            )
         self.assertRaises(ValidationError, r.save)
 
     def test_raises_on_wrong_hour(self):
@@ -144,7 +165,7 @@ class TestReadingModel(TestCase):
             second=timestamp.second,
             microsecond=timestamp.microsecond,
             timestamp=timestamp
-        )
+            )
         self.assertRaises(ValidationError, r.save)
 
     def test_raises_on_wrong_minute(self):
@@ -159,7 +180,7 @@ class TestReadingModel(TestCase):
             second=timestamp.second,
             microsecond=timestamp.microsecond,
             timestamp=timestamp
-        )
+            )
         self.assertRaises(ValidationError, r.save)
 
     def test_raises_on_wrong_second(self):
@@ -174,7 +195,7 @@ class TestReadingModel(TestCase):
             second=(timestamp.second + 1) % 60,
             microsecond=timestamp.microsecond,
             timestamp=timestamp
-        )
+            )
         self.assertRaises(ValidationError, r.save)
 
     def test_raises_on_wrong_microsecond(self):
@@ -189,5 +210,5 @@ class TestReadingModel(TestCase):
             second=timestamp.second,
             microsecond=(timestamp.microsecond + 1) % 1000,
             timestamp=timestamp
-        )
+            )
         self.assertRaises(ValidationError, r.save)

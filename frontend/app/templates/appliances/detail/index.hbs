@@ -4,6 +4,13 @@
       <h2>{{model.name}}</h2>
       <span class="flex"></span>
       {{#paper-button mini=true
+                      aria-label="Manage authentication"
+                      disabled=model.isActive
+                      onClick=(action 'goToManageAuth')}}
+        {{paper-icon "security"}}
+      {{/paper-button}}
+
+      {{#paper-button mini=true
                       aria-label="Delete"
                       disabled=model.isActive
                       onClick=(action 'deleteAppliance')}}
@@ -24,18 +31,6 @@
             Activate
           {{/paper-button}}
         {{/if}}
-      </div>
-      <div class="layout-column">
-        {{#cp-panel as |p|}}
-          {{#p.toggle}}
-            <p>Show auth token</p>
-          {{/p.toggle}}
-          {{#p.body}}
-            <div>
-              <p>{{model.authenticationValue}}</p>
-            </div>
-          {{/p.body}}
-        {{/cp-panel}}
       </div>
     </div>
     <div class="layout-row">

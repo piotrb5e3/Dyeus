@@ -12,6 +12,7 @@ Router.map(function () {
     this.route('detail', {path: ":appliance_id"}, function () {
       this.route('sensor', {path: "sensor/:sensor_id"}, function() {});
       this.route('new-sensor');
+      this.route('manage-auth');
     });
     this.route('new');
   });

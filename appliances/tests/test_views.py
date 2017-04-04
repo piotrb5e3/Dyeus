@@ -1,3 +1,5 @@
+import base64
+import os
 import json
 from faker import Faker
 from django.urls import reverse
@@ -45,7 +47,7 @@ class TestUnauthenticatedAppliancesViews(APITestCase):
         data = {
             'name': fake.sha256(),
             'authenticationModel': 'token',
-        }
+            }
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
         appliances = Appliance.objects.filter(name=data['name'])
@@ -61,7 +63,7 @@ class TestUnauthenticatedAppliancesViews(APITestCase):
         data = {
             'name': fake.sha256(),
             'authenticationModel': 'token',
-        }
+            }
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
@@ -125,47 +127,33 @@ class TestAuthenticatedApplianceViews(APITestCase):
                         'name': s.name,
                         'code': s.code,
                         'appliance': s.appliance.id
-                    } for s in a.sensors.all()],
+                        } for s in a.sensors.all()],
                 'is_active': a.is_active,
                 'authentication_model': a.authentication_model,
-                'authentication_value': a.authentication_value,
-
-            } for a in [self.appliance1, self.appliance2]])
+                } for a in [self.appliance1, self.appliance2]])
 
     def test_can_create_appliance(self):
         url = reverse('appliance-list')
         data = {
             'name': fake.name(),
             'authentication_model': 'token',
-        }
+            }
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
         appliances = Appliance.objects.filter(name=data['name'],
                                               owner=self.user1)
         self.assertEqual(appliances.count(), 1)
-
-    def test_can_create_appliance_with_gcm(self):
-        url = reverse('appliance-list')
-        data = {
-            'name': fake.name(),
-            'authentication_model': 'gcm_aes',
-        }
-        response = self.client.post(url, data, format='json')
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-
-        appliances = Appliance.objects.filter(name=data['name'],
-                                              owner=self.user1)
-        self.assertEqual(appliances.count(), 1)
-        a = appliances.first()
-        self.assertEqual(len(a.authentication_value), 32)
 
     def test_can_change_appliance(self):
         url = reverse('appliance-detail', args=(self.appliance1.id,))
+        av = base64.b64encode(os.urandom(32)).decode()
         data = {
             'name': fake.name(),
-            'authentication_model': 'token',
-        }
+            'authentication_model': 'sha_hmac',
+            'authentication_value': av,
+            }
+
         response = self.client.put(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -173,6 +161,9 @@ class TestAuthenticatedApplianceViews(APITestCase):
                                               name=data['name'],
                                               owner=self.user1)
         self.assertEqual(appliances.count(), 1)
+        appliance = appliances.first()
+        self.assertEqual(appliance.authentication_value, av)
+        self.assertEqual(appliance.authentication_model, 'sha_hmac')
 
     def test_cant_see_other_user_appliance_detail(self):
         url = reverse('appliance-detail', args=(self.appliance3.id,))
@@ -184,7 +175,7 @@ class TestAuthenticatedApplianceViews(APITestCase):
         data = {
             'name': fake.name(),
             'authentication_model': 'token',
-        }
+            }
         response = self.client.put(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
@@ -222,6 +213,18 @@ class TestAuthenticatedApplianceViews(APITestCase):
         self.assertEqual(Appliance.objects.get(pk=aid).is_active, True)
         response = self.client.post(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_202_ACCEPTED)
+        self.assertEqual(Appliance.objects.get(pk=aid).is_active, False)
+
+    def test_cant_activate_appliance_wo_authentication_value(self):
+        aid = self.appliance1.id
+        self.appliance1.authentication_value = ""
+        self.appliance1.save()
+
+        url = reverse('appliance-activate', args=(aid,))
+        self.assertEqual(Appliance.objects.get(pk=aid).is_active, False)
+
+        response = self.client.post(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(Appliance.objects.get(pk=aid).is_active, False)
 
     def test_cant_activate_active_appliance(self):

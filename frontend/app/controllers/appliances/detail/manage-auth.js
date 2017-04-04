@@ -10,7 +10,6 @@ export default Ember.Controller.extend({
   actions: {
     submitNewAppliance() {
       const model = this.get('model');
-      model.set('authenticationValue', "");
       model.save()
         .then(() => this.transitionToRoute('appliances'))
         .catch((err) => console.log(err));

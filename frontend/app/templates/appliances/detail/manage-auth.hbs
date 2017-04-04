@@ -1,0 +1,40 @@
+{{#paper-card as |card|}}
+  {{#card.title as |title|}}
+    {{#title.text as |text|}}
+      {{#text.headline}}Manage authentication{{/text.headline}}
+    {{/title.text}}
+  {{/card.title}}
+  {{#paper-form onSubmit=(action "submitNewAppliance") as |form|}}
+    {{#card.content }}
+      <div class="layout-row">
+        <div class="layout-column flex-100">
+          {{#form.select
+            label="Authentication model"
+            options=authModelSelectValues
+            selected=model.authenticationModel
+            onChange=(action (mut model.authenticationModel))
+            required=true
+          as |state|}}
+            {{get authModelsVerbose state}}
+          {{/form.select}}
+        </div>
+      </div>
+      <div class="layout-row">
+        <div class="layout-column flex-100">
+          {{form.input label='Authentication value'
+                       value=model.authenticationValue
+                       onChange=(action (mut model.authenticationValue))
+                       required=true}}
+        </div>
+      </div>
+      {{#card.actions}}
+        {{#form.submit-button
+          primary=true
+          disabled=form.isInvalid}}
+          Submit
+        {{/form.submit-button}}
+      {{/card.actions}}
+    {{/card.content}}
+  {{/paper-form}}
+{{/paper-card}}
+{{outlet}}

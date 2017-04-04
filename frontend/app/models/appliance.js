@@ -11,12 +11,10 @@ export default DS.Model.extend({
     {
       path: 'activate/',
       type: 'POST',
-
     }),
   deactivate: instanceOp(
     {
       path: 'deactivate/',
       type: 'POST',
-
     }),
 });

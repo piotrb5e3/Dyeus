@@ -44,4 +44,4 @@ class TestAuthenticatedUsersViews(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(json.loads(response.content), {
             'username': self.user.username
-        })
+            })

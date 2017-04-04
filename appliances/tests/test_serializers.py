@@ -1,3 +1,5 @@
+import os
+import base64
 from django.test import TestCase
 
 from appliances.tests.factory import create_appliance
@@ -31,10 +33,8 @@ class TestApplianceSerializer(TestCase):
         self.assertEqual(data['is_active'], self.appliance.is_active)
         self.assertEqual(data['authentication_model'],
                          self.appliance.authentication_model)
-        self.assertEqual(data['authentication_value'],
-                         self.appliance.authentication_value)
         self.assertEqual(len(data['sensors']), 2)
-        self.assertEqual(len(data), 6)
+        self.assertEqual(len(data), 5)
 
     def test_deserialize(self):
         dirty_data = {
@@ -42,7 +42,7 @@ class TestApplianceSerializer(TestCase):
             'name': 'Lorem ipsum',
             'is_active': True,
             'authentication_model': 'token',
-            'authentication_value': '0xDEADBEEF',
+            'authentication_value': base64.b64encode(os.urandom(32)).decode(),
             'sensors': [],
             'owner': 12,
             'extras': {
@@ -59,9 +59,10 @@ class TestApplianceSerializer(TestCase):
         self.assertEqual(data['name'], dirty_data['name'])
         self.assertRaises(KeyError, lambda: data['is_active'])
         self.assertEqual(data['authentication_model'],
-                         data['authentication_model'])
-        self.assertRaises(KeyError, lambda: data['authentication_value'])
+                         dirty_data['authentication_model'])
+        self.assertEqual(data['authentication_value'],
+                         dirty_data['authentication_value'])
         self.assertRaises(KeyError, lambda: data['sensors'])
         self.assertRaises(KeyError, lambda: data['owner'])
         self.assertRaises(KeyError, lambda: data['extras'])
-        self.assertEqual(len(data), 2)
+        self.assertEqual(len(data), 3)

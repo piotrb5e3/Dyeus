@@ -21,5 +21,9 @@ export default Ember.Controller.extend({
       const model = this.get('model');
       this.transitionToRoute('appliances.detail.new-sensor', model);
     },
+    goToManageAuth() {
+      const model = this.get('model');
+      this.transitionToRoute('appliances.detail.manage-auth', model);
+    },
   }
 });

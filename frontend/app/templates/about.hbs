@@ -33,7 +33,7 @@
     </p>
     <h3>API</h3>
     <h4>Token authentication</h4>
-    <p>SmartToaster appliance with token <code>iBWNgR92luZ/+tDEH8Nxbw</code> and 3 sensors:</p>
+    <p>SmartToaster appliance with token <code>8gbbVEnuLlCJgUWHxraNcBxtHMte7zjqhKdb4mlGLA0=</code> and 3 sensors:</p>
     <ol>
       <li>ToastTemp, reading: 40.34&#176;C, code:
         <code>toastt</code>
@@ -50,16 +50,17 @@
       Payload:
     </p>
     <pre>{
-  "token": "iBWNgR92luZ/+tDEH8Nxbw",
+  "id": 1337,
+  "token": "8gbbVEnuLlCJgUWHxraNcBxtHMte7zjqhKdb4mlGLA0=",
   "sensors": {
     "toastt": "40.34",
     "ambientt": "17.52",
     "toasth": "30"
   }
 }</pre>
-    <h4>GCM AES authentication</h4>
-    <p>SmartToaster appliance with encryption key
-      <code>b2369d109f56b7c3a39738a8231410a4</code><sub><code>16</code></sub>, id <code>1337</code>
+    <h4>SHA-256 HMAC authentication</h4>
+    <p>SmartToaster appliance with secret key
+      <code>YWFhYWFhYWFhYWFhYWFhYWJiYmJiYmJiYmJiYmJiYmI=</code>, id <code>1337</code>
       and 3 sensors:</p>
     <ol>
       <li>ToastTemp, reading: 40.34&#176;C, code:
@@ -72,34 +73,14 @@
         <code>toasth</code>
       </li>
     </ol>
-    <p>Encryption steps:</p>
-    <ol>
-      <li>Generate a 96-bit iv (nonce). Example: <code>85a7028ab17079d20c02c782</code><sub><code>16</code></sub></li>
-      <li>Construct a string JSON data with sensor values. Example:
-        <pre>{
-  "toastt": "40.34",
-  "ambientt": "17.52",
-  "toasth": "30"
-}</pre>
-      </li>
-      <li>Construct additional authenticated data string: <code>hex_iv + "ff" + decimal_id</code>.
-        Example: <code>85a7028ab17079d20c02c782ff1337</code></li>
-      <li>Encrypt the JSON with AES128 in GCM mode with given key, iv and additional authenticated data. Example:
-        <pre>7c9cba096a39356acea1e610bf3591139e774aefffbce02e7fc27da441e91f4c
-957f10224508bb5f571c1dbbad463d781719069fdd16b31bdeef1421ee5c2312</pre>
-      </li>
-      <li>Calculate the tag. Example: <code>13edc75a1dd962ba884b4525052e31f5</code></li>
-    </ol>
     <p>
-      Endpoint location: <code>https://0bit.pw/dyeus/api/collect/gcm-aes/</code><br>
-      Payload (line wrapped):
+      Endpoint location: <code>https://0bit.pw/dyeus/api/collect/sha-hmac/</code><br>
+      Payload:
     </p>
     <pre>{
   "id": 1337,
-  "iv": "85a7028ab17079d20c02c782",
-  "tag": "13edc75a1dd962ba884b4525052e31f5",
-  "sensors": "7c9cba096a39356acea1e610bf3591139e774aefffbce02e7fc27da441e91f4c
-      957f10224508bb5f571c1dbbad463d781719069fdd16b31bdeef1421ee5c2312"
+  "data":"toastt=40.34,ambientt=17.52,toasth=30,2017-01-10T10:10:10",
+  "mac":"jdAM199x9F9gamVxXYD2rhpXltuziiz/3ylork6cD0c="
 }</pre>
   {{/card.content}}
 {{/paper-card}}

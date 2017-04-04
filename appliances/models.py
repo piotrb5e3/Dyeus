@@ -1,13 +1,27 @@
+import binascii
+import base64
 from datetime import datetime, timezone
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
 
+
+def validate_256bit_or_more_b64_string(value):
+    try:
+        bytevalue = base64.b64decode(value)
+        if len(bytevalue) < 32:
+            raise ValidationError(
+                "Authentication value must be at least 32 bytes")
+
+    except binascii.Error:
+        raise ValidationError(
+            "Authentication value must be a correct base64 encoded string")
+
+
 AUTH_MODEL_CHOICES = [
     ('token', 'Token'),
-    ('gcm_aes', 'GCM + AES128'),
     ('sha_hmac', 'SHA256 HMAC')
-]
+    ]
 
 
 class Appliance(models.Model):
@@ -15,7 +29,10 @@ class Appliance(models.Model):
     is_active = models.BooleanField(default=False)
     authentication_model = models.CharField(max_length=16,
                                             choices=AUTH_MODEL_CHOICES)
-    authentication_value = models.CharField(max_length=64, unique=True)
+    authentication_value = models.CharField(
+        max_length=64, blank=True, default="",
+        validators=[validate_256bit_or_more_b64_string])
+
     owner = models.ForeignKey('users.DyeusUser', on_delete=models.CASCADE,
                               related_name='appliances')
 
@@ -52,7 +69,8 @@ class Reading(models.Model):
                                       self.hour, self.minute, self.second,
                                       self.microsecond, tzinfo=timezone.utc)
         if self.timestamp != expected_timestamp:
-            raise ValidationError("Timestamp should match other time fields")
+            raise ValidationError(
+                "Timestamp should match other time fields")
 
     def save(self, *args, **kwargs):
         self.full_clean()
