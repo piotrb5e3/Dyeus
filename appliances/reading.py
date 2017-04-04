@@ -1,11 +1,10 @@
 from django.db import transaction
-from datetime import datetime, timezone
 
 from appliances.models import Reading
 from sensors.models import SensorValue
 
 
-def new_reading_from_data(appliance, sensors, timestamp=None):
+def new_reading_from_data(appliance, sensors, timestamp):
     appliance_sensors = appliance.sensors.all()
 
     with transaction.atomic():
@@ -22,9 +21,6 @@ def new_reading_from_data(appliance, sensors, timestamp=None):
 
 
 def _new_reading(appliance, timestamp):
-    if timestamp is None:
-        timestamp = datetime.now(tz=timezone.utc)
-
     return Reading(
         appliance=appliance,
         timestamp=timestamp,

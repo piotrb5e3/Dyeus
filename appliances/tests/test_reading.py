@@ -1,6 +1,6 @@
 from random import random
 from faker import Faker
-from datetime import timezone
+from datetime import datetime, timezone
 
 from django.test import TestCase
 
@@ -12,7 +12,7 @@ from users.tests.factory import create_regular_dyeus_user
 from sensors.tests.factory import create_sensor
 
 from appliances.reading import (_new_reading, new_reading_from_data,
-                                ReadingException)
+                                ReadingException, )
 
 fake = Faker()
 
@@ -45,31 +45,8 @@ class TestReading(TestCase):
             self.sensor2.code: str(random()),
         }
 
-        new_reading_from_data(self.appliance, data)
-
-        r = Reading.objects.filter(appliance=self.appliance)
-
-        self.assertEqual(r.count(), 1)
-        r = r.first()
-        self.assertEqual(r.values.count(), 2)
-
-        s = SensorValue.objects.filter(reading=r, sensor=self.sensor1)
-        self.assertEqual(s.count(), 1)
-        s = s.first()
-        self.assertEqual(s.value, data[self.sensor1.code])
-
-        s = SensorValue.objects.filter(reading=r, sensor=self.sensor2)
-        self.assertEqual(s.count(), 1)
-        s = s.first()
-        self.assertEqual(s.value, data[self.sensor2.code])
-
-    def test_create_reading_from_data_and_timestamp(self):
-        data = {
-            self.sensor1.code: str(random()),
-            self.sensor2.code: str(random()),
-        }
-
-        new_reading_from_data(self.appliance, data)
+        new_reading_from_data(self.appliance, data,
+                              datetime.now(tz=timezone.utc))
 
         r = Reading.objects.filter(appliance=self.appliance)
 
@@ -93,7 +70,7 @@ class TestReading(TestCase):
         }
 
         self.assertRaises(ReadingException, new_reading_from_data,
-                          self.appliance, data)
+                          self.appliance, data, datetime.now(tz=timezone.utc))
 
         r = Reading.objects.filter(appliance=self.appliance)
 

@@ -16,12 +16,14 @@ from .crypto import sha256_check_mac, CryptoException
 
 @api_view(['POST'])
 def token_collect(request):
-    if any([x not in request.data for x in ['id', 'token', 'sensors']]):
+    if any([x not in request.data
+            for x in ['id', 'token', 'sensors', 'timestamp']]):
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
     id = request.data['id']
     token = request.data['token']
     sensors = request.data['sensors']
+    timestamp_str = request.data['timestamp']
 
     appliances = Appliance.objects.filter(id=id, authentication_model='token',
                                           authentication_value=token,
@@ -32,7 +34,15 @@ def token_collect(request):
     appliance = appliances.first()
 
     try:
-        new_reading_from_data(appliance, sensors)
+        timestamp = (dateutil.parser.parse(timestamp_str)
+                     .replace(tzinfo=timezone.utc))
+    except ValueError:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+    except TypeError:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    try:
+        new_reading_from_data(appliance, sensors, timestamp)
     except ReadingException:
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
@@ -72,7 +82,6 @@ def sha_hmac_collect(request):
 
     try:
         timestamp = dateutil.parser.parse(dtstr).replace(tzinfo=timezone.utc)
-
     except ValueError:
         return Response(status=status.HTTP_400_BAD_REQUEST)
 

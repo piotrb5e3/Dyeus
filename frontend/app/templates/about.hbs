@@ -56,10 +56,11 @@
     "toastt": "40.34",
     "ambientt": "17.52",
     "toasth": "30"
-  }
+  },
+  "timestamp": "2017-01-10T10:10:10"
 }</pre>
     <h4>SHA-256 HMAC authentication</h4>
-    <p>SmartToaster appliance with secret key
+    <p>SmartToaster appliance with base64 encoded secret key
       <code>YWFhYWFhYWFhYWFhYWFhYWJiYmJiYmJiYmJiYmJiYmI=</code>, id <code>1337</code>
       and 3 sensors:</p>
     <ol>
@@ -82,6 +83,8 @@
   "data":"toastt=40.34,ambientt=17.52,toasth=30,2017-01-10T10:10:10",
   "mac":"jdAM199x9F9gamVxXYD2rhpXltuziiz/3ylork6cD0c="
 }</pre>
+    <p><code>mac</code> is the base64 encoded SHA-256 HMAC of
+      <code>data</code> with the shared secret key.<br></p>
   {{/card.content}}
 {{/paper-card}}
 {{outlet}}
