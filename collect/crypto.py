@@ -5,6 +5,7 @@ from cryptography.hazmat.primitives.ciphers import (
     Cipher, algorithms, modes
 )
 from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives import hashes, hmac
 from cryptography.exceptions import InvalidTag
 
 
@@ -54,6 +55,14 @@ def aes128_gcm_decrypt(hex_key, bytes_id, hex_iv, hex_ciphertext, hex_tag):
         return decryptor.update(ciphertext) + decryptor.finalize()
     except InvalidTag:
         raise CryptoException('Bad tag')
+
+
+def sha256_check_mac(data, key, expected_mac):
+    h = hmac.HMAC(key, hashes.SHA256(), backend=default_backend())
+    h.update(data)
+    actual_mac = h.finalize()
+    if expected_mac != actual_mac:
+        raise CryptoException('Bad MAC')
 
 
 class CryptoException(Exception):
