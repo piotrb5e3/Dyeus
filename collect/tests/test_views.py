@@ -1,4 +1,3 @@
-import binascii
 import base64
 
 from datetime import datetime, timezone, timedelta
@@ -242,12 +241,12 @@ class TestSHAHMACCollectViews(APITestCase):
         h = hmac.HMAC(binkey, hashes.SHA256(), backend=default_backend())
         h.update(payload.encode())
         mac = h.finalize()
-        hex_mac = binascii.hexlify(mac)
+        b64_mac = base64.b64encode(mac)
 
         data = {
             'id': self.id_int,
             'data': payload,
-            'mac': hex_mac,
+            'mac': b64_mac,
         }
 
         response = self.client.post(self.url, data, format='json')
@@ -285,7 +284,7 @@ class TestSHAHMACCollectViews(APITestCase):
         data = {
             'id': self.id_int,
             'data': payload,
-            'mac': binascii.hexlify(b'\0' * 64),
+            'mac': "ThisISABadMAC__$%%^",
         }
 
         response = self.client.post(self.url, data, format='json')
@@ -305,12 +304,12 @@ class TestSHAHMACCollectViews(APITestCase):
         h = hmac.HMAC(binkey, hashes.SHA256(), backend=default_backend())
         h.update(payload.encode())
         mac = h.finalize()
-        hex_mac = binascii.hexlify(mac)
+        b64_mac = base64.b64encode(mac)
 
         data = {
             'id': self.id_int,
             'data': payload,
-            'mac': hex_mac
+            'mac': b64_mac
         }
 
         response = self.client.post(self.url, data, format='json')
@@ -323,12 +322,12 @@ class TestSHAHMACCollectViews(APITestCase):
         h = hmac.HMAC(binkey, hashes.SHA256(), backend=default_backend())
         h.update(payload.encode())
         mac = h.finalize()
-        hex_mac = binascii.hexlify(mac)
+        b64_mac = base64.b64encode(mac)
 
         data = {
             'id': self.id_int,
             'data': payload,
-            'mac': hex_mac
+            'mac': b64_mac
         }
 
         response = self.client.post(self.url, data, format='json')
@@ -341,12 +340,12 @@ class TestSHAHMACCollectViews(APITestCase):
         h = hmac.HMAC(binkey, hashes.SHA256(), backend=default_backend())
         h.update(payload.encode())
         mac = h.finalize()
-        hex_mac = binascii.hexlify(mac)
+        b64_mac = base64.b64encode(mac)
 
         data = {
             'id': self.id_int,
             'data': payload,
-            'mac': hex_mac
+            'mac': b64_mac
         }
 
         response = self.client.post(self.url, data, format='json')

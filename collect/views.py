@@ -55,7 +55,7 @@ def sha_hmac_collect(request):
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
     int_id = request.data['id']
-    hex_mac = request.data['mac']
+    b64_mac = request.data['mac']
     payload = request.data['data']
 
     appliances = Appliance.objects.filter(authentication_model='sha_hmac',
@@ -65,8 +65,11 @@ def sha_hmac_collect(request):
 
     appliance = appliances.first()
 
-    binkey = base64.b64decode(appliance.authentication_value)
-    expected_mac = binascii.unhexlify(hex_mac)
+    try:
+        binkey = base64.b64decode(appliance.authentication_value)
+        expected_mac = base64.b64decode(b64_mac)
+    except binascii.Error:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
 
     try:
         sha256_check_mac(payload.encode(), binkey, expected_mac)
