@@ -16,6 +16,13 @@ module.exports = function (environment) {
         }
       },
     ],
+    sentry: {
+      dsn: 'https://<dummykey>@app.getsentry.com/<dummyproject>',
+      debug: true,
+      development: false,
+      exposedPropertyName: 'raven',
+      globalErrorCatching: false,
+    },
     EmberENV: {
       FEATURES: {}
     },
