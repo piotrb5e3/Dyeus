@@ -1,8 +1,7 @@
 import { moduleFor, test } from 'ember-qunit';
 
 moduleFor('controller:appliances/detail/manage-auth', 'Unit | Controller | appliances/detail/manage auth', {
-  // Specify the other units that are required for this test.
-  // needs: ['controller:foo']
+  needs: ['service:metrics']
 });
 
 // Replace this with your real tests.

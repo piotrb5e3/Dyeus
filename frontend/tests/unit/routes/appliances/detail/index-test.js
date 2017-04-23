@@ -1,8 +1,7 @@
 import { moduleFor, test } from 'ember-qunit';
 
 moduleFor('route:appliances/detail/index', 'Unit | Route | appliances/detail/index', {
-  // Specify the other units that are required for this test.
-  // needs: ['controller:foo']
+  needs: ['service:metrics']
 });
 
 test('it exists', function(assert) {

@@ -6,6 +6,16 @@ module.exports = function (environment) {
     environment: environment,
     rootURL: '/',
     locationType: 'auto',
+    metricsAdapters: [
+      {
+        name: 'Piwik',
+        environments: ['all'],
+        config: {
+          piwikUrl: '127.0.0.1',
+          siteId: 42
+        }
+      },
+    ],
     EmberENV: {
       FEATURES: {}
     },
