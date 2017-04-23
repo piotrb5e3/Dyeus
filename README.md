@@ -27,3 +27,8 @@ Dyeus is a web application for gathering and displaying sensory data, and making
 ### Running tests
 * Backend: `./manage.py test`
 * Frontend: `cd frontend; ember test`
+
+### Updating dependencies
+* Backend:
+  * `pip install pip-tools`
+  * `pip-compile requirements.in > requirements.txt`

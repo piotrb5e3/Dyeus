@@ -1,0 +1,6 @@
+cryptography
+Django
+django-cors-middleware
+djangorestframework
+Faker
+psycopg2
