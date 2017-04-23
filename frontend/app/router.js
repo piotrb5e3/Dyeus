@@ -35,6 +35,7 @@ Router.map(function () {
   });
   this.route('logout');
   this.route('about');
+  this.route('test-sentry');
 });
 
 export default Router;
