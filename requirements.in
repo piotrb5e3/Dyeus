@@ -4,3 +4,4 @@ django-cors-middleware
 djangorestframework
 Faker
 psycopg2
+raven
