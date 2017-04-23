@@ -14,3 +14,8 @@ def auth_test(request):
 def get_current_user_data(request):
     user = request.user
     return Response({'username': user.get_username()})
+
+
+@api_view(['GET'])
+def status(request):
+    return Response("OK")

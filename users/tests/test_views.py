@@ -23,6 +23,12 @@ class TestUnauthenticatedUsersViews(APITestCase):
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
+    def test_status(self):
+        url = reverse('status')
+        response = self.client.get(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.content, b'"OK"')
+
 
 class TestAuthenticatedUsersViews(APITestCase):
     user = None
